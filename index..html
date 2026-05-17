@@ -1,0 +1,2950 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PR 97 — 資優？績優！</title>
+
+<!-- ───── 社群分享預覽（Open Graph / Twitter Card）───── -->
+<meta name="description" content="一款破解「補習可以成為資優生」迷思的教育模擬遊戲。你是一位小六生的家長，每個選擇都會悄悄改變這個家。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PR 97 — 資優？績優！">
+<meta property="og:description" content="一款破解「補習可以成為資優生」迷思的教育模擬遊戲。每個選擇都會悄悄改變這個家。">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PR 97 — 資優？績優！">
+<meta name="twitter:description" content="一款破解「補習可以成為資優生」迷思的教育模擬遊戲。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ─── neutrals ─── */
+    --bg:          #f4efe6;
+    --bg-elev:     #fbf8f1;
+    --surface:     #ffffff;
+    --hairline:    rgba(26, 22, 18, 0.10);
+    --hairline-2:  rgba(26, 22, 18, 0.18);
+
+    /* legacy aliases (kept for inline-style compatibility) */
+    --paper:       #f4efe6;
+    --paper-warm:  #fbf8f1;
+    --paper-dark:  #e8e1d1;
+
+    --ink:         #1a1612;
+    --ink-2:       #3d362d;
+    --ink-soft:    #6b6358;
+    --ink-mute:    #9a9082;
+
+    /* ─── accents ─── */
+    --accent:      #8a3424;
+    --accent-light:#b85a45;
+    --accent-soft: #b85a45;
+    --accent-bg:   rgba(138, 52, 36, 0.06);
+    --sage:        #4d6b4f;
+    --gold:        #9a7838;
+    --gold-light:  #c5a572;
+    --gold-soft:   #c5a572;
+
+    --shadow-warm: rgba(26, 22, 18, 0.08);
+    --shadow-deep: rgba(26, 22, 18, 0.18);
+
+    --shadow-sm:   0 1px 2px rgba(26, 22, 18, 0.06), 0 1px 1px rgba(26, 22, 18, 0.04);
+    --shadow-md:   0 4px 16px rgba(26, 22, 18, 0.08), 0 1px 2px rgba(26, 22, 18, 0.04);
+    --shadow-lg:   0 12px 32px rgba(26, 22, 18, 0.14);
+
+    /* ─── type stacks ─── */
+    --font-serif:  "Noto Serif TC", "Songti TC", "Source Han Serif", serif;
+    --font-sans:   "Noto Sans TC", -apple-system, "Helvetica Neue", system-ui, sans-serif;
+    --font-num:    "Instrument Serif", "Noto Serif TC", serif;
+    --font-mono:   "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-feature-settings: "palt" 1;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* subtle paper grain */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 15% 20%, rgba(154, 120, 56, 0.05) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 80%, rgba(138, 52, 36, 0.04) 0%, transparent 55%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  body.reveal-mode {
+    background: #0d0b09;
+    color: #f0e9da;
+    transition: background 1.6s ease, color 1.6s ease;
+  }
+  body.reveal-mode::before { opacity: 0.25; }
+
+  .game-container {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+    min-height: 100vh;
+  }
+
+  /* ───────── HEADER ───────── */
+  .game-header {
+    margin-bottom: 36px;
+    padding: 18px 20px;
+    background: var(--bg-elev);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .game-title {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .game-title::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .chapter-tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    padding: 4px 10px;
+    background: var(--accent-bg);
+    border-radius: 999px;
+    font-weight: 500;
+  }
+
+  .resources {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .resource {
+    text-align: left;
+  }
+
+  .resource-label {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .resource-bar {
+    height: 4px;
+    background: var(--hairline);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .resource-fill {
+    height: 100%;
+    transition: width 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+    border-radius: 2px;
+  }
+
+  .resource[data-type="money"]  .resource-fill { background: var(--gold); }
+  .resource[data-type="mood"]   .resource-fill { background: var(--accent-soft); }
+  .resource[data-type="health"] .resource-fill { background: var(--sage); }
+  .resource[data-type="grade"]  .resource-fill { background: var(--ink-2); }
+
+  .resource-value {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink);
+    margin-top: 6px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fake-progress {
+    background: var(--surface);
+    border: 1px solid var(--hairline-2);
+    border-radius: 8px;
+    padding: 11px 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .fake-progress-label {
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .fake-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--hairline);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .fake-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+    transition: width 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+    border-radius: 3px;
+  }
+
+  .fake-progress-pct {
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--gold);
+    min-width: 44px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ───────── SCENE ───────── */
+  .scene {
+    animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .scene-chapter {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .scene-chapter::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--hairline);
+  }
+
+  .scene-title {
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 22px;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+
+  .scene-narrative {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    line-height: 2;
+    color: var(--ink-2);
+    margin-bottom: 28px;
+    padding: 22px 26px;
+    background: var(--bg-elev);
+    border: 1px solid var(--hairline);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+
+  .scene-narrative em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 600;
+    border-bottom: 1px dotted var(--accent-soft);
+    padding-bottom: 1px;
+  }
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .choice-btn {
+    background: var(--surface);
+    border: 1px solid var(--hairline-2);
+    border-radius: 8px;
+    padding: 18px 22px;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--ink);
+    line-height: 1.6;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .choice-btn:hover {
+    background: var(--bg-elev);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .choice-btn:hover .choice-letter {
+    background: var(--accent);
+    color: var(--bg-elev);
+    border-color: var(--accent);
+  }
+
+  .choice-btn:active {
+    transform: translateY(0);
+  }
+
+  .choice-letter {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--accent);
+    font-size: 0.82rem;
+    width: 24px; height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--hairline-2);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin: 2px 0 0 0;
+    transition: all 0.2s ease;
+  }
+
+  /* effect chips */
+  .effect-flash {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    z-index: 100;
+    pointer-events: none;
+    max-width: 90vw;
+  }
+
+  .effect-chip {
+    background: var(--surface);
+    border: 1px solid var(--ink);
+    padding: 8px 16px;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-radius: 999px;
+    animation: chipFloat 1.6s ease-out forwards;
+    box-shadow: var(--shadow-lg);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .effect-chip.positive { color: var(--sage); border-color: var(--sage); }
+  .effect-chip.negative { color: var(--accent); border-color: var(--accent); }
+
+  @keyframes chipFloat {
+    0%   { opacity: 0; transform: translateY(16px) scale(0.85); }
+    20%  { opacity: 1; transform: translateY(0) scale(1); }
+    80%  { opacity: 1; transform: translateY(-16px) scale(1); }
+    100% { opacity: 0; transform: translateY(-48px) scale(0.95); }
+  }
+
+  /* ───────── INTRO / TITLE SCREEN ───────── */
+  .intro-screen {
+    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .intro-pretitle {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.35em;
+    color: var(--accent);
+    margin-bottom: 22px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .intro-title {
+    font-family: var(--font-num);
+    font-style: italic;
+    font-size: clamp(5rem, 16vw, 8.5rem);
+    color: var(--ink);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    font-weight: 400;
+  }
+
+  .intro-pr {
+    font-family: var(--font-num);
+    font-size: clamp(4rem, 14vw, 7rem);
+    color: var(--accent);
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .intro-subtitle {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--ink);
+    letter-spacing: 0.32em;
+    margin-bottom: 8px;
+    font-weight: 500;
+    padding-left: 0.32em;
+  }
+
+  .intro-sub-en {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.28em;
+    margin-bottom: 52px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .intro-description {
+    max-width: 460px;
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    line-height: 2.1;
+    color: var(--ink-2);
+    margin-bottom: 48px;
+    text-wrap: pretty;
+  }
+
+  .intro-description em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .start-btn {
+    background: var(--ink);
+    color: var(--bg-elev);
+    border: none;
+    padding: 16px 52px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.92rem;
+    letter-spacing: 0.32em;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+    border-radius: 999px;
+  }
+
+  .start-btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .intro-warning {
+    margin-top: 48px;
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+    line-height: 1.9;
+    max-width: 400px;
+  }
+
+  /* ───────── RANDOM EVENT CARD ───────── */
+  .card-screen {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .card-label {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.28em;
+    color: var(--accent);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .event-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--hairline-2);
+    box-shadow: var(--shadow-md);
+    border-radius: 10px;
+    padding: 30px 28px 28px;
+    margin: 0 auto 26px;
+    max-width: 480px;
+    text-align: left;
+    position: relative;
+    animation: cardDeal 0.7s cubic-bezier(0.3, 1, 0.3, 1);
+  }
+
+  .event-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 28px; right: 28px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 0 0 3px 3px;
+  }
+
+  @keyframes cardDeal {
+    from { opacity: 0; transform: rotate(-2deg) translateY(28px); }
+    to   { opacity: 1; transform: rotate(0) translateY(0); }
+  }
+
+  .card-number {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.16em;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .card-title {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 14px;
+    letter-spacing: 0.01em;
+  }
+
+  .card-desc {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--ink-2);
+    margin-bottom: 0;
+  }
+
+  /* ───────── REVEAL ───────── */
+  .reveal-screen {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    animation: slowFade 2s ease-in;
+  }
+
+  @keyframes slowFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .reveal-prefix {
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    color: rgba(240, 233, 218, 0.55);
+    letter-spacing: 0.3em;
+    margin-bottom: 44px;
+    animation: fadeIn 1.5s ease;
+    font-weight: 400;
+  }
+
+  .reveal-number {
+    font-family: var(--font-num);
+    font-style: italic;
+    font-size: clamp(7rem, 25vw, 14rem);
+    color: var(--gold-soft);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-shadow: 0 0 40px rgba(197, 165, 114, 0.25);
+    animation: numberReveal 3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @keyframes numberReveal {
+    0%   { opacity: 0; transform: scale(1.4); filter: blur(20px); }
+    40%  { opacity: 0.3; transform: scale(1.08); filter: blur(8px); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .reveal-label {
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    color: rgba(240, 233, 218, 0.65);
+    letter-spacing: 0.2em;
+    margin-top: 30px;
+    opacity: 0;
+    animation: fadeIn 1s ease 2.5s forwards;
+    font-weight: 400;
+  }
+
+  .reveal-truth {
+    margin-top: 60px;
+    max-width: 520px;
+    line-height: 2.2;
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    color: rgba(240, 233, 218, 0.82);
+    opacity: 0;
+    animation: fadeIn 2s ease 4s forwards;
+  }
+
+  .reveal-truth em {
+    font-style: normal;
+    color: var(--accent-soft);
+    font-weight: 600;
+  }
+
+  .reveal-continue {
+    margin-top: 56px;
+    background: transparent;
+    border: 1px solid rgba(240, 233, 218, 0.4);
+    color: rgba(240, 233, 218, 0.85);
+    padding: 13px 38px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.86rem;
+    letter-spacing: 0.32em;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeIn 1s ease 6s forwards;
+    transition: all 0.3s ease;
+    border-radius: 999px;
+  }
+
+  .reveal-continue:hover {
+    background: rgba(240, 233, 218, 0.08);
+    border-color: var(--gold-soft);
+    color: var(--gold-soft);
+  }
+
+  /* ───────── ENDING SCREENS ───────── */
+  .ending-screen {
+    padding: 30px 0;
+  }
+
+  .summary-block {
+    background: var(--bg-elev);
+    border: 1px solid var(--hairline-2);
+    border-radius: 10px;
+    padding: 28px 26px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .summary-title {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.28em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .summary-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 0.96rem;
+    gap: 16px;
+  }
+
+  .summary-line:last-child {
+    border-bottom: none;
+  }
+
+  .summary-label {
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+
+  .summary-value {
+    font-family: var(--font-mono);
+    font-size: 1.08rem;
+    color: var(--ink);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .summary-value.bad  { color: var(--accent); }
+  .summary-value.good { color: var(--sage); }
+
+  .quote-block {
+    text-align: center;
+    padding: 40px 20px;
+    margin: 30px 0;
+  }
+
+  .quote-intro {
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    color: var(--ink-mute);
+    margin-bottom: 24px;
+    letter-spacing: 0.12em;
+    font-weight: 400;
+  }
+
+  .quote-text {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 1.4rem;
+    line-height: 2;
+    color: var(--ink);
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 24px 32px;
+    position: relative;
+    letter-spacing: 0.02em;
+  }
+
+  .quote-text::before,
+  .quote-text::after {
+    font-family: var(--font-num);
+    font-style: italic;
+    color: var(--accent);
+    font-size: 4rem;
+    line-height: 0.5;
+    position: absolute;
+    opacity: 0.4;
+  }
+  .quote-text::before { content: "\201C"; top: 28px; left: -4px; }
+  .quote-text::after  { content: "\201D"; bottom: 0; right: -4px; }
+
+  .quote-attribution {
+    margin-top: 28px;
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.08em;
+    font-weight: 400;
+  }
+
+  .ending-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--hairline-2);
+    border-radius: 12px;
+    padding: 40px 32px;
+    margin-bottom: 28px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    position: relative;
+  }
+
+  .ending-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 32px; right: 32px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 0 0 3px 3px;
+  }
+
+  .ending-icon {
+    font-size: 2.2rem;
+    margin-bottom: 14px;
+  }
+
+  .ending-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.7rem;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+
+  .ending-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.28em;
+    color: var(--accent);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .ending-text {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    line-height: 2.05;
+    color: var(--ink-2);
+    text-align: left;
+    padding: 0 4px;
+    text-wrap: pretty;
+  }
+
+  .ending-text em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .ending-text strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .reality-block {
+    background: var(--surface);
+    border: 1px solid var(--hairline-2);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 26px 26px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .reality-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin-bottom: 18px;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .reality-title::before,
+  .reality-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--accent-bg);
+  }
+
+  .reality-item {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--ink-2);
+    padding: 14px 0;
+    border-bottom: 1px solid var(--accent-bg);
+  }
+  .reality-item:last-child { border-bottom: none; }
+  .reality-item strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ───── Q&A clickable cards ───── */
+  .qa-block {
+    background: var(--bg-elev);
+    border: 1px solid var(--hairline-2);
+    border-radius: 10px;
+    padding: 26px 22px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .qa-section-title {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.28em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    text-align: center;
+    font-weight: 500;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .qa-section-hint {
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    color: var(--ink-mute);
+    text-align: center;
+    letter-spacing: 0.06em;
+    margin: 14px 0 8px;
+    font-weight: 400;
+  }
+
+  .qa-item {
+    border-bottom: 1px solid var(--hairline);
+    overflow: hidden;
+  }
+  .qa-item:last-child { border-bottom: none; }
+
+  .qa-question {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink);
+    padding: 16px 8px 16px 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    user-select: none;
+  }
+  .qa-question:hover { color: var(--accent); }
+
+  .qa-q-text {
+    flex: 1;
+    text-wrap: pretty;
+  }
+
+  .qa-toggle {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--hairline-2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+  .qa-item.open .qa-toggle {
+    transform: rotate(45deg);
+    background: var(--accent);
+    color: var(--bg-elev);
+    border-color: var(--accent);
+  }
+
+  .qa-answer {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.3s ease;
+    padding: 0 4px;
+    font-family: var(--font-serif);
+    font-size: 0.93rem;
+    line-height: 1.95;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .qa-item.open .qa-answer {
+    max-height: 2400px;
+    opacity: 1;
+    padding: 4px 4px 22px;
+  }
+
+  .qa-answer .qa-big {
+    font-family: var(--font-num);
+    font-size: 2.2rem;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    display: inline-block;
+    margin: 4px 6px 4px 0;
+    font-style: italic;
+    line-height: 1;
+  }
+
+  .qa-answer .qa-meta {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    margin-left: 4px;
+  }
+
+  .qa-answer strong { color: var(--accent); font-weight: 600; }
+  .qa-answer em { color: var(--accent); font-style: normal; font-weight: 600; }
+
+  .qa-answer .qa-cite {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--ink-mute);
+    margin-top: 12px;
+    padding-left: 12px;
+    border-left: 2px solid var(--hairline-2);
+    letter-spacing: 0.04em;
+    font-style: italic;
+  }
+
+  .qa-answer .qa-interview {
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    padding: 12px 14px;
+    margin: 12px 0 6px;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.85;
+    border-radius: 0 4px 4px 0;
+  }
+  .qa-answer .qa-interview-from {
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+  }
+
+  .qa-answer table.qa-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    margin: 12px 0 4px;
+    font-family: var(--font-sans);
+  }
+  .qa-answer table.qa-table th,
+  .qa-answer table.qa-table td {
+    padding: 6px 4px;
+    text-align: left;
+    border-bottom: 1px solid var(--hairline);
+    font-variant-numeric: tabular-nums;
+  }
+  .qa-answer table.qa-table th {
+    font-weight: 500;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+  }
+  .qa-answer table.qa-table tr.qa-row-latest td {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .final-message {
+    text-align: center;
+    padding: 60px 20px 40px;
+  }
+
+  .final-text {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.7rem;
+    line-height: 2.2;
+    color: var(--ink);
+    max-width: 480px;
+    margin: 0 auto 40px;
+    letter-spacing: 0.04em;
+  }
+
+  .final-text em {
+    font-style: normal;
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 2px;
+    font-weight: 700;
+  }
+
+  /* 結局專屬引言（每個結局不同） */
+  .ending-quote {
+    max-width: 500px;
+    margin: 0 auto 40px;
+    padding: 22px 28px;
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    text-align: left;
+  }
+  .ending-quote-intro {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .ending-quote-text {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.02rem;
+    line-height: 1.95;
+    color: var(--ink);
+    margin-bottom: 12px;
+    text-wrap: pretty;
+  }
+  .ending-quote-from {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.06em;
+    text-align: right;
+  }
+
+  .final-sub {
+    color: var(--ink-mute);
+    font-size: 0.9rem;
+    line-height: 2;
+    margin: 0 auto 38px;
+    max-width: 440px;
+    font-family: var(--font-serif);
+  }
+
+  /* 上一頁按鈕區別樣式 */
+  .restart-btn.nav-back {
+    opacity: 0.7;
+    letter-spacing: 0.18em;
+  }
+  .restart-btn.nav-back:hover { opacity: 1; }
+
+  /* ─────  Step 6 closure: stats + message  ───── */
+  .closure-block {
+    background: var(--bg-elev);
+    border: 1px solid var(--hairline-2);
+    border-radius: 10px;
+    padding: 28px 26px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .closure-divider {
+    height: 1px;
+    background: var(--hairline);
+    margin: 28px -10px;
+  }
+
+  .stats-section { padding: 8px 0 4px; }
+
+  .stats-headline {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px dashed var(--hairline);
+  }
+  .stats-headline .stat-big {
+    display: block;
+    font-family: var(--font-num);
+    font-style: italic;
+    font-size: 3rem;
+    color: var(--accent);
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    margin-bottom: 6px;
+  }
+  .stats-headline .stat-suffix {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .stat-cell {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 16px 14px;
+    text-align: center;
+  }
+  .stat-cell-num {
+    font-family: var(--font-num);
+    font-style: italic;
+    font-size: 1.7rem;
+    color: var(--ink);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-cell-label {
+    margin-top: 6px;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+  }
+
+  .my-rank {
+    margin-top: 22px;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 0.96rem;
+    line-height: 1.95;
+    color: var(--ink-2);
+    padding: 14px 16px;
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    text-align: left;
+  }
+  .my-rank strong { font-weight: 600; }
+
+  .stats-loading { padding: 16px 0; }
+
+  /* 留言區 */
+  .message-area { padding: 4px 0 8px; }
+  .message-prompt {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .message-prompt-sub {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+    letter-spacing: 0.04em;
+  }
+  .message-textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 12px 14px;
+    border: 1px solid var(--hairline-2);
+    border-radius: 6px;
+    font-family: var(--font-serif);
+    font-size: 0.96rem;
+    line-height: 1.75;
+    background: var(--surface);
+    color: var(--ink);
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+  }
+  .message-textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .message-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    gap: 12px;
+  }
+  .message-charcount {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--ink-mute);
+    font-variant-numeric: tabular-nums;
+  }
+  .send-btn {
+    background: var(--accent);
+    color: var(--bg-elev);
+    border: 1px solid var(--accent);
+    padding: 10px 26px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.84rem;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+  .send-btn:hover { background: var(--accent-light); border-color: var(--accent-light); }
+  .send-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .message-status {
+    margin-top: 10px;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    min-height: 1.4em;
+    color: var(--ink-soft);
+  }
+  .message-status.warn { color: var(--accent); }
+  .message-status.ok   { color: var(--sage); }
+
+  .message-sent {
+    text-align: center;
+    padding: 32px 16px;
+  }
+  .message-sent-icon {
+    font-size: 2.4rem;
+    color: var(--sage);
+    margin-bottom: 10px;
+  }
+  .message-sent-text {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 480px) {
+    .stats-headline .stat-big { font-size: 2.4rem; }
+    .stat-cell-num { font-size: 1.4rem; }
+    .message-actions { flex-direction: column-reverse; align-items: stretch; }
+    .send-btn { width: 100%; padding: 14px; }
+    .message-charcount { text-align: right; }
+  }
+
+  .restart-btn {
+    background: transparent;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    padding: 13px 36px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.86rem;
+    letter-spacing: 0.32em;
+    cursor: pointer;
+    margin: 0 8px;
+    transition: all 0.3s ease;
+  }
+
+  .restart-btn:hover {
+    background: var(--ink);
+    color: var(--bg-elev);
+    border-color: var(--ink);
+  }
+
+  .restart-btn.primary {
+    background: var(--ink);
+    color: var(--bg-elev);
+  }
+  .restart-btn.primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .button-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* ───── early ending (refused to take test) ───── */
+  .refused-screen {
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  /* ───── responsive ───── */
+  @media (max-width: 480px) {
+    .game-container { padding: 20px 16px 60px; }
+    .resources { grid-template-columns: repeat(2, 1fr); gap: 14px 16px; }
+    .scene-title { font-size: 1.4rem; }
+    .scene-narrative { padding: 18px 20px; font-size: 1rem; line-height: 1.95; }
+    .choice-btn { padding: 15px 18px; font-size: 0.96rem; }
+    .fake-progress { flex-wrap: wrap; gap: 8px; }
+    .fake-progress-label { width: 100%; }
+    .summary-line { font-size: 0.9rem; }
+    .summary-value { font-size: 0.98rem; }
+    .intro-warning { font-size: 0.72rem; }
+  }
+
+  /* hide header on intro and reveal screens */
+  body.hide-header .game-header { display: none; }
+</style>
+</head>
+<body>
+
+<div class="game-container">
+  <header class="game-header" id="gameHeader">
+    <div class="title-bar">
+      <div class="game-title">PR 97 &nbsp;/&nbsp; 資優？績優！</div>
+      <div class="chapter-tag" id="chapterTag">Prologue</div>
+    </div>
+    <div class="resources" id="resourcesBar">
+      <div class="resource" data-type="money">
+        <div class="resource-label"><span>金錢</span><span class="resource-value" id="v-money">50</span></div>
+        <div class="resource-bar"><div class="resource-fill" id="r-money" style="width:50%"></div></div>
+      </div>
+      <div class="resource" data-type="mood">
+        <div class="resource-label"><span>心情</span><span class="resource-value" id="v-mood">50</span></div>
+        <div class="resource-bar"><div class="resource-fill" id="r-mood" style="width:50%"></div></div>
+      </div>
+      <div class="resource" data-type="health">
+        <div class="resource-label"><span>健康</span><span class="resource-value" id="v-health">50</span></div>
+        <div class="resource-bar"><div class="resource-fill" id="r-health" style="width:50%"></div></div>
+      </div>
+      <div class="resource" data-type="grade">
+        <div class="resource-label"><span>成績</span><span class="resource-value" id="v-grade">50</span></div>
+        <div class="resource-bar"><div class="resource-fill" id="r-grade" style="width:50%"></div></div>
+      </div>
+    </div>
+    <div class="fake-progress">
+      <div class="fake-progress-label">預估通過率</div>
+      <div class="fake-progress-bar">
+        <div class="fake-progress-fill" id="fakeFill" style="width:35%"></div>
+      </div>
+      <div class="fake-progress-pct" id="fakePct">35%</div>
+    </div>
+  </header>
+
+  <main id="scene"></main>
+</div>
+
+<script>
+/* =====================================================
+   PR 97 — 資優？績優！(v3: 破解迷思 ‧ Q&A 結語)
+   結構：初選性向測驗（PR97）→ 複選實作評量 → Q&A 結算與報告
+===================================================== */
+
+/* =====================================================
+   DATA COLLECTION (Google Apps Script)
+===================================================== */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxl00qsSGE07GwyE5-HALPiabz57C8JGF_spzV4XW1XmHcwwPm2WDwY1TLdmOehrCNG/exec';
+
+function generateSessionId() {
+  return 'pr97_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+}
+
+function sendDataToSheet(endingKey) {
+  if (!APPS_SCRIPT_URL) {
+    console.log('PR97: APPS_SCRIPT_URL 未設定，資料不會送出（遊戲照常）');
+    return;
+  }
+  const passedOverall = state.passedPreliminary && state.passedComplex;
+  const payload = {
+    action: 'record',
+    sessionId: state.sessionId,
+    ending: endingKey,
+    pr: state.innatePR,
+    passed: passedOverall,
+    passedPreliminary: state.passedPreliminary,
+    refused: state.refusedToTest,
+    moneySpent: state.moneySpent,
+    finalMood: state.resources.mood,
+    finalHealth: state.resources.health,
+    finalGrade: state.resources.grade,
+    moodLowCount: state.moodLowCount,
+    q27: state.q27_answer || '',
+    q41: state.q41_answer || '',
+    history: state.history.map(h => `${h.eventId}:${h.label}`).join(' | ')
+             + ` || prelim:${state.passedPreliminary ? 'Y' : 'N'}`
+             + ` complex:${state.finalComplexScore}/${state.innateComplexScore}`
+             + ` complexPass:${state.passedComplex ? 'Y' : 'N'}`
+  };
+  // 1) 先 fire-and-forget 寫入（no-cors，跨域 POST 最穩的方式）
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  }).then(() => console.log('PR97: data sent successfully'))
+    .catch(err => console.warn('PR97: data send failed', err));
+
+  // 2) 延後 1.5 秒，用 GET 取回統計（這個方向跨域可以讀 response）
+  setTimeout(() => fetchStatsFromSheet(), 1500);
+}
+
+function fetchStatsFromSheet() {
+  if (!APPS_SCRIPT_URL) return;
+  const url = APPS_SCRIPT_URL + '?action=stats&sessionId=' + encodeURIComponent(state.sessionId);
+  fetch(url, { method: 'GET' })
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.ok) {
+        state.stats = data;
+        console.log('PR97: stats received', data);
+        // 如果使用者已經滑到 Step 6（結語頁），即時刷新
+        if (endingStep === 6) renderClosure();
+      } else {
+        console.warn('PR97: stats response not ok', data);
+      }
+    })
+    .catch(err => console.warn('PR97: stats fetch failed', err));
+}
+
+function sendMessageToSheet(message) {
+  if (!APPS_SCRIPT_URL || !message) return Promise.resolve(false);
+  return fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      action: 'message',
+      sessionId: state.sessionId,
+      message: message
+    })
+  }).then(() => true).catch(() => false);
+}
+
+/* =====================================================
+   STATE
+===================================================== */
+const initialState = () => ({
+  sessionId: generateSessionId(),
+  resources: { money: 50, mood: 50, health: 50, grade: 50 },
+  innatePR: 0,             // 性向測驗（初選）天生值
+  innateComplexScore: 0,   // 實作評量天生值
+  finalComplexScore: 0,    // 實作評量最終值（扣除壓力 penalty）
+  complexPenalty: 0,       // 因家庭破碎導致的扣分
+  passedPreliminary: false,
+  passedComplex: false,
+  moneySpent: 0,
+  moodLowCount: 0,
+  history: [],
+  q27_answer: null,
+  q41_answer: null,
+  refusedToTest: false,
+  dataSent: false,
+  stats: null,             // { playerNumber, passNumber, total, passed, refused }
+  messageSent: false,      // Step 6 留言是否已送出
+  phase: 'main',           // 'main' | 'complex'
+});
+
+let state = initialState();
+
+/* =====================================================
+   HIDDEN VALUE GENERATION
+===================================================== */
+// 初選 PR 值：3-5% 通過率（PR ≥ 97）
+function generatePR() {
+  const u = Math.random();
+  if (u < 0.05) return 97 + Math.floor(Math.random() * 3);   // 5% pass
+  if (u < 0.28) return 88 + Math.floor(Math.random() * 9);
+  if (u < 0.73) return 75 + Math.floor(Math.random() * 13);
+  return 60 + Math.floor(Math.random() * 15);
+}
+
+// 實作評量原始分數：常態分布，平均 55，過半者能通過 (>=50)
+// 符合北市 115 學年 複選通過率約 50-65% 的真實數據
+function generateComplexScore() {
+  let sum = 0;
+  for (let i = 0; i < 6; i++) sum += Math.random() * 100;
+  const avg = sum / 6;          // 中央極限定理 → 接近常態，平均 50
+  return Math.round(20 + avg * 0.7);  // 範圍約 20-90，平均約 55
+}
+
+// 計算複選最終分數（扣除壓力 penalty）
+function calculateFinalComplexScore() {
+  let penalty = 0;
+  if (state.resources.health < 30) penalty += 8;
+  if (state.resources.mood < 30) penalty += 8;
+  if (state.resources.health < 15) penalty += 5;
+  if (state.resources.mood < 15) penalty += 5;
+  state.complexPenalty = penalty;
+  state.finalComplexScore = Math.max(0, state.innateComplexScore - penalty);
+  return state.finalComplexScore;
+}
+
+/* =====================================================
+   EVENTS — 全新雙階段結構
+===================================================== */
+const EVENTS = {
+  // ========== 第一部分：小六上學期 ==========
+  e11: {
+    chapter: '第一部分 ‧ 小六上學期',
+    title: '老師的建議',
+    narrative: '期中家長會結束後，班導留下你說：「您家小孩學科表現優異，排名都在前面，要不要考慮國中資優班？」',
+    choices: [
+      { label: 'A', text: '好，我馬上物色補習班', effects: { money: -10, grade: 10, mood: -5 }, spend: 10 },
+      { label: 'B', text: '謝謝老師，但孩子開心比較重要', effects: { mood: 10 } },
+      { label: 'C', text: '我問問孩子的意願再決定', effects: { mood: 5, grade: 3 } }
+    ],
+    next: 'e12'
+  },
+  e12: {
+    chapter: '第一部分 ‧ 小六上學期',
+    title: '70 分的考卷',
+    narrative: '期中考結束，小孩拿回一張 70 分的國文考卷。',
+    choices: [
+      { label: 'A', text: '問他為什麼考這麼差', effects: { mood: -10, grade: 5 } },
+      { label: 'B', text: '跟他說沒關係，下次加油', effects: { mood: 10 } },
+      { label: 'C', text: '一起看考卷，找出他不懂的地方', effects: { mood: 5, grade: 5, health: -3 } }
+    ],
+    next: 'e13'
+  },
+  e13: {
+    chapter: '第一部分 ‧ 小六上學期',
+    title: '隔壁的「優秀範本」',
+    narrative: '你聽說隔壁小明的哥哥考上某國中數理資優班，前陣子還得了科展大獎。',
+    choices: [
+      { label: 'A', text: '跟孩子分享，並暗示「你也可以」', effects: { grade: 5, mood: -10 } },
+      { label: 'B', text: '跟孩子分享，問他有沒有興趣', effects: { mood: 5 } },
+      { label: 'C', text: '不主動提，自己默默物色資源', effects: { money: -5, grade: 3 }, spend: 5 }
+    ],
+    next: 'card1'
+  },
+
+  // ========== 第二部分：小六下學期 ==========
+  e21: {
+    chapter: '第二部分 ‧ 小六下學期',
+    title: '孩子的拒絕',
+    narrative: '孩子鄭重對你說：「我不想考資優鑑定，壓力太大了。」',
+    choices: [
+      { label: 'A', text: '好，不考就不考', effects: {}, special: 'refuse' },
+      { label: 'B', text: '老師說你很有天賦，還是試試看吧', effects: { mood: -15, grade: 5 } },
+      { label: 'C', text: '你先休息一下，我們之後再聊', effects: { mood: 5 } }
+    ],
+    next: 'e22'
+  },
+  e22: {
+    chapter: '第二部分 ‧ 小六下學期',
+    title: '免費營隊',
+    narrative: '鄰居熱心轉告：「某國中辦【金腦袋】免費營隊，專收要考資優班的小孩，快去報名！」',
+    choices: [
+      { label: 'A', text: '不上白不上，立刻報名', effects: { money: -5, grade: 10, mood: -5 }, spend: 5 },
+      { label: 'B', text: '孩子說沒興趣，不報', effects: { mood: 5 } }
+    ],
+    next: 'e23'
+  },
+  e23: {
+    chapter: '第二部分 ‧ 小六下學期',
+    title: '補習班招生說明會',
+    narrative: '你參加了一場補習班說明會。台上的老師說：「我們去年送進資優班的學生有 <em>87%</em> 都上了！」桌上擺著厚厚的講義和限時優惠方案。',
+    choices: [
+      { label: 'A', text: '簽下「資優保證班」全套課程', effects: { money: -30, grade: 15, mood: -10 }, spend: 30 },
+      { label: 'B', text: '只報週末單科加強', effects: { money: -15, grade: 8, mood: -5 }, spend: 15 },
+      { label: 'C', text: '婉拒，回家自學就好', effects: { mood: 5 } }
+    ],
+    next: 'e24'
+  },
+  e24: {
+    chapter: '第二部分 ‧ 小六下學期',
+    title: '放鬆的方式',
+    narrative: '孩子最近埋首大滿貫、考古題，你決定帶他放鬆一下。',
+    choices: [
+      { label: 'A', text: '逛街買他想要的遊戲', effects: { money: -10, mood: 10 } },
+      { label: 'B', text: '全家出遊公園散步', effects: { mood: 5, health: 10 } },
+      { label: 'C', text: '算了，休息半天還是讀書要緊', effects: { mood: -10, grade: 5 } }
+    ],
+    next: 'e25'
+  },
+  e25: {
+    chapter: '第二部分 ‧ 小六下學期',
+    title: '同學家長的炫耀',
+    narrative: '家長群組裡，某位媽媽傳了訊息：「我們小宇補了三家，昨天模考 <em>PR 98</em>！你們家補幾科啊？」',
+    choices: [
+      { label: 'A', text: '我也要再加一科，不能輸', effects: { money: -20, grade: 10, mood: -10 }, spend: 20 },
+      { label: 'B', text: '維持現況就好', effects: { mood: -5 } },
+      { label: 'C', text: '退出群組，不看這些', effects: { mood: 10 } }
+    ],
+    next: 'card2'
+  },
+
+  // ========== 第三部分：升國中過渡 ==========
+  e31: {
+    chapter: '第三部分 ‧ 升國中暑假',
+    title: '畢業典禮之後',
+    narrative: '小學畢業了。距離資優鑑定的初選還有四個月（依台北市流程，將在七年級上學期 10 月舉辦）。<br><br>暑假兩個月，孩子問你：「我們暑假可以去哪裡玩嗎？」',
+    choices: [
+      { label: 'A', text: '報名暑期密集衝刺班，把握黃金兩個月', effects: { money: -25, grade: 15, mood: -10, health: -5 }, spend: 25 },
+      { label: 'B', text: '安排一週家庭旅行，其他時間照常學習', effects: { money: -10, mood: 15, health: 10 } },
+      { label: 'C', text: '完全放假，讓他玩個夠', effects: { mood: 15, health: 5, grade: -5 } }
+    ],
+    next: 'e41'
+  },
+
+  // ========== 第四部分：國中 ‧ 初選衝刺期 ==========
+  e41: {
+    chapter: '第四部分 ‧ 國中初選衝刺期',
+    title: '報名表 & 推薦表',
+    narrative: '七年級開學，10 月初要報名資優鑑定。報名表附了一張<em>家長觀察推薦表</em>，你拿起筆。',
+    choices: [
+      { label: 'A', text: '孩子用功努力，是成績優異的資優生', effects: { grade: 10 } },
+      { label: 'B', text: '孩子愛問問題，對自然觀察特別有興趣', effects: { mood: 5 } },
+      { label: 'C', text: '孩子有自己的步調，我希望他做喜歡的事', effects: { mood: 10, health: 5 } }
+    ],
+    next: 'e42'
+  },
+  e42: {
+    chapter: '第四部分 ‧ 國中初選衝刺期',
+    title: '孩子的疑問',
+    narrative: '某天晚上，孩子放下筆抬頭問你：「爸爸/媽媽，為什麼一定要考資優班？」',
+    choices: [
+      { label: 'A', text: '因為這樣未來的路會比較好走', effects: {}, record: 'q27', answer: '因為這樣未來的路會比較好走。' },
+      { label: 'B', text: '因為我們花了很多錢，你要對得起這些投入', effects: {}, record: 'q27', answer: '因為我們花了很多錢，你要對得起這些投入。' },
+      { label: 'C', text: '其實不一定要，你可以告訴我你怎麼想', effects: {}, record: 'q27', answer: '其實不一定要，你可以告訴我你怎麼想。' }
+    ],
+    next: 'e43'
+  },
+  e43: {
+    chapter: '第四部分 ‧ 國中初選衝刺期',
+    title: '性向測驗的最後加強',
+    narrative: '初選只剩三週。性向測驗考的是<em>邏輯推理、數學性向、自然性向</em>——補習班老師說：「我們有獨家題庫，多刷就有手感。」',
+    choices: [
+      { label: 'A', text: '砸錢買全套題庫，每天加練兩小時', effects: { money: -25, grade: 15, mood: -10, health: -10 }, spend: 25 },
+      { label: 'B', text: '只做學校發的練習，正常作息', effects: { health: 5 } },
+      { label: 'C', text: '帶他放空一天，反正性向測驗也練不來', effects: { mood: 10, health: 5 } }
+    ],
+    next: 'card3'
+  },
+
+  // ========== 第五部分：初選日 ==========
+  e51: {
+    chapter: '第五部分 ‧ 初選日',
+    title: '鑑定當天',
+    narrative: '10 月 28 日清晨。孩子穿著制服坐在餐桌前，沒怎麼動筷。你看著他蒼白的臉。',
+    choices: [
+      { label: 'A', text: '拍拍他的肩：「盡力就好。」', effects: { mood: 10 } },
+      { label: 'B', text: '提醒他：「題本要看清楚，別粗心。」', effects: { mood: -5 } },
+      { label: 'C', text: '什麼都不說，默默開車送他到考場', effects: {} }
+    ],
+    next: 'prelim_reveal'
+  },
+
+  // ========== 第六部分：複選衝刺期（僅在通過初選後觸發）==========
+  e61: {
+    chapter: '第六部分 ‧ 複選衝刺期',
+    title: '進入複選之後',
+    narrative: '11 月 19 日，初選結果公告——你的孩子<em>通過了</em>。<br><br>但你很快發現，這只是第一關。複選是 12 月初的<em>實作評量</em>，據說題目是現場給材料、要你即時操作分析。<br><br>補習班馬上來電：「最後衝刺班只剩兩個名額！沒考上全額退費！」',
+    choices: [
+      { label: 'A', text: '投入「保證班」，反正考不上會退費', effects: { money: -40, grade: 10, mood: -15, health: -10 }, spend: 40 },
+      { label: 'B', text: '只報週末實作題庫課程', effects: { money: -15, grade: 5, mood: -5 }, spend: 15 },
+      { label: 'C', text: '不報了，他已經夠累', effects: { mood: 10, health: 5 } }
+    ],
+    next: 'e62'
+  },
+  e62: {
+    chapter: '第六部分 ‧ 複選衝刺期',
+    title: '最後一週',
+    narrative: '距離複選只剩一週。孩子每天讀到深夜，眼睛底下的黑眼圈越來越深。<br><br>實作評量考的不只是知識，還有<em>臨場反應和心理素質</em>——他現在的狀態，能應付得來嗎？',
+    choices: [
+      { label: 'A', text: '陪他熬夜，做完所有歷屆考古', effects: { money: -10, grade: 8, health: -20, mood: -10 }, spend: 10 },
+      { label: 'B', text: '強制他十點上床，睡飽再說', effects: { mood: -5, health: 15 } },
+      { label: 'C', text: '帶他去公園散步一個下午', effects: { mood: 15, health: 10, grade: -5 } }
+    ],
+    next: 'e71'
+  },
+
+  // ========== 第七部分：複選日 + 預測 ==========
+  e71: {
+    chapter: '第七部分 ‧ 複選日',
+    title: '你的預期',
+    narrative: '複選當天清晨。孩子在你車上補眠，你看著他疲憊的側臉。<br><br>你心裡覺得他這次會通過嗎？',
+    choices: [
+      { label: 'A', text: '一定會，我們付出這麼多', effects: {}, record: 'q41', answer: '一定會，我們付出這麼多。' },
+      { label: 'B', text: '應該會吧，希望努力有回報', effects: {}, record: 'q41', answer: '應該會吧，希望努力有回報。' },
+      { label: 'C', text: '不確定，只希望他盡力就好', effects: {}, record: 'q41', answer: '不確定，只希望他盡力就好。' },
+      { label: 'D', text: '我覺得不會，但還是要試', effects: {}, record: 'q41', answer: '我覺得不會，但還是要試。' }
+    ],
+    next: 'complex_reveal'
+  }
+};
+
+/* =====================================================
+   RANDOM EVENT CARDS
+===================================================== */
+const RANDOM_CARDS = [
+  { n: '01', title: '小孩感冒', desc: '孩子在學校發燒，老師通知你來接。',
+    choices: [
+      { label: 'A', text: '請假一週好好休息', effects: { health: 15, grade: -5, mood: 5 } },
+      { label: 'B', text: '吃藥撐著繼續去補習', effects: { health: -15, grade: 5, mood: -10 } }
+    ]},
+  { n: '02', title: '臨時加班', desc: '公司來了急件，你必須加班到深夜。',
+    choices: [
+      { label: 'A', text: '接下加班費', effects: { money: 15, mood: -10 } },
+      { label: 'B', text: '婉拒，回家陪孩子', effects: { money: -5, mood: 10 } }
+    ]},
+  { n: '03', title: '學校科展', desc: '老師邀請孩子參加科展，要花時間和材料費。',
+    choices: [
+      { label: 'A', text: '全力支持', effects: { money: -5, grade: 5, mood: 10, health: -5 }, spend: 5 },
+      { label: 'B', text: '婉拒，專心拚資優', effects: { mood: -10, grade: 3 } }
+    ]},
+  { n: '04', title: '家庭爭吵', desc: '你和配偶因為「該補多少」吵了一架，孩子在房間聽到了。',
+    choices: [
+      { label: 'A', text: '隔天當著孩子的面和解', effects: { mood: 5 } },
+      { label: 'B', text: '假裝沒事', effects: { mood: -15 } }
+    ]},
+  { n: '05', title: '校內獎學金', desc: '孩子在校內競賽得獎，有一筆獎學金。',
+    choices: [
+      { label: 'A', text: '拿來繳補習費', effects: { money: 10, mood: -5 } },
+      { label: 'B', text: '給孩子當零用錢', effects: { money: 5, mood: 15 } }
+    ]},
+  { n: '06', title: '同學邀約打球', desc: '同學約孩子放學後去打球。',
+    choices: [
+      { label: 'A', text: '拒絕，要去補習', effects: { mood: -10, grade: 5 } },
+      { label: 'B', text: '答應，讓他放鬆', effects: { mood: 10, health: 10, grade: -5 } }
+    ]},
+  { n: '07', title: '加強班招攬', desc: '補習班老師主動找你：「加報週日特訓班吧。」',
+    choices: [
+      { label: 'A', text: '報名', effects: { money: -15, grade: 10, mood: -10, health: -5 }, spend: 15 },
+      { label: 'B', text: '不報', effects: { mood: 5 } }
+    ]},
+  { n: '08', title: '祖父母來訪', desc: '阿公阿嬤來家裡，帶來零用錢和拿手菜。',
+    choices: [
+      { label: 'A', text: '接受陪伴，放孩子一天假', effects: { money: 5, mood: 15, health: 5 } },
+      { label: 'B', text: '禮貌打招呼後讓孩子繼續讀書', effects: { money: 5, mood: -5 } }
+    ]},
+  { n: '09', title: '手機沉迷', desc: '你發現孩子半夜偷玩手機。',
+    choices: [
+      { label: 'A', text: '沒收手機', effects: { mood: -10, grade: 5 } },
+      { label: 'B', text: '跟他談談，約定使用時間', effects: { mood: 5, grade: 3, health: 3 } }
+    ]},
+  { n: '10', title: '熬夜複習', desc: '孩子主動要熬夜讀書。',
+    choices: [
+      { label: 'A', text: '同意，陪他熬', effects: { grade: 5, health: -15, mood: -5 } },
+      { label: 'B', text: '強制他睡覺', effects: { mood: -5, health: 10 } }
+    ]}
+];
+
+/* =====================================================
+   FAKE PROGRESS BAR
+===================================================== */
+function calculateFakeProgress() {
+  const { grade, money, mood, health } = state.resources;
+  let v = 20 + grade * 0.55 + (money * 0.2);
+  if (mood < 30) v -= (30 - mood) * 0.3;
+  if (health < 30) v -= (30 - health) * 0.3;
+  return Math.max(5, Math.min(95, Math.round(v)));
+}
+
+/* =====================================================
+   UI HELPERS
+===================================================== */
+function updateResourceBars() {
+  for (const key of ['money', 'mood', 'health', 'grade']) {
+    const v = state.resources[key];
+    document.getElementById('r-' + key).style.width = v + '%';
+    document.getElementById('v-' + key).textContent = v;
+  }
+  const fake = calculateFakeProgress();
+  document.getElementById('fakeFill').style.width = fake + '%';
+  document.getElementById('fakePct').textContent = fake + '%';
+}
+
+function applyEffects(effects, spend) {
+  for (const [k, v] of Object.entries(effects || {})) {
+    state.resources[k] = Math.max(0, Math.min(100, state.resources[k] + v));
+  }
+  if (state.resources.mood < 30) state.moodLowCount++;
+  if (spend) state.moneySpent += spend * 1000;
+  updateResourceBars();
+}
+
+function formatMoney(amt) {
+  return 'NT$ ' + amt.toLocaleString();
+}
+
+function showEffectFlash(effects) {
+  if (!effects || !Object.keys(effects).length) return;
+  const labels = { money: '💰金錢', mood: '🌸心情', health: '🌿健康', grade: '📚成績' };
+  const container = document.createElement('div');
+  container.className = 'effect-flash';
+  for (const [k, v] of Object.entries(effects)) {
+    const chip = document.createElement('div');
+    chip.className = 'effect-chip ' + (v > 0 ? 'positive' : 'negative');
+    chip.textContent = labels[k] + ' ' + (v > 0 ? '+' : '') + v;
+    container.appendChild(chip);
+  }
+  document.body.appendChild(container);
+  setTimeout(() => container.remove(), 1700);
+}
+
+/* =====================================================
+   SCENE RENDERERS
+===================================================== */
+const scene = document.getElementById('scene');
+
+function renderIntro() {
+  document.body.classList.add('hide-header');
+  scene.innerHTML = `
+    <div class="intro-screen">
+      <div class="intro-pretitle">A Myth-Busting Simulation</div>
+      <div class="intro-title">PR 97</div>
+      <div class="intro-subtitle">資優？績優！</div>
+      <div class="intro-sub-en">Gifted, or Just High-Scoring?</div>
+      <div class="intro-description">
+        你是一位小六生的家長。<br>
+        從這個學期起，陪孩子準備國中資優鑑定。<br>
+        鑑定分為<em>初選性向測驗</em>與<em>複選實作評量</em>兩個階段。<br>
+        每一個選擇，都會悄悄改變這個家。
+      </div>
+      <button class="start-btn" onclick="startGame()">開始遊戲</button>
+      <div class="intro-warning">
+        本作品為「破解『補習可以成為資優生』迷思」的教育模擬遊戲，<br>
+        約需 7 分鐘體驗。建議您耐心讀完每一段，直到結局。<br><br>
+        <span style="opacity:0.75;">為了解玩家體驗，我們會匿名記錄您的選擇與結局，<br>
+        資料不含任何可識別個人身分的資訊。</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderEvent(eventId) {
+  document.body.classList.remove('hide-header');
+  const e = EVENTS[eventId];
+  let chapterText = 'Chapter I';
+  if (eventId.startsWith('e2')) chapterText = 'Chapter II';
+  else if (eventId.startsWith('e3')) chapterText = 'Chapter III';
+  else if (eventId.startsWith('e4')) chapterText = 'Chapter IV';
+  else if (eventId.startsWith('e5')) chapterText = 'Chapter V';
+  else if (eventId.startsWith('e6')) chapterText = 'Chapter VI';
+  else if (eventId.startsWith('e7')) chapterText = 'Chapter VII';
+  document.getElementById('chapterTag').textContent = chapterText;
+
+  scene.innerHTML = `
+    <div class="scene">
+      <div class="scene-chapter">${e.chapter}</div>
+      <h2 class="scene-title">${e.title}</h2>
+      <div class="scene-narrative">${e.narrative}</div>
+      <div class="choices">
+        ${e.choices.map((c, i) => `
+          <button class="choice-btn" data-i="${i}">
+            <span class="choice-letter">${c.label}.</span>${c.text}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  scene.querySelectorAll('.choice-btn').forEach((btn, i) => {
+    btn.addEventListener('click', () => handleChoice(eventId, i));
+  });
+}
+
+function handleChoice(eventId, choiceIdx) {
+  const e = EVENTS[eventId];
+  const c = e.choices[choiceIdx];
+  state.history.push({ eventId, label: c.label, text: c.text });
+  if (c.record === 'q27') state.q27_answer = c.answer;
+  if (c.record === 'q41') state.q41_answer = c.answer;
+
+  if (c.special === 'refuse') {
+    state.refusedToTest = true;
+    renderRefusedEnding();
+    return;
+  }
+
+  applyEffects(c.effects, c.spend);
+  showEffectFlash(c.effects);
+  setTimeout(() => goNext(e.next), 700);
+}
+
+/* =====================================================
+   RANDOM CARD SYSTEM
+===================================================== */
+let randomCardPool = [];
+const CARD_SCHEDULE = {
+  card1: 'e21',  // 進入小六下學期
+  card2: 'e31',  // 進入升國中暑假
+  card3: 'e51'   // 進入初選日
+};
+
+function pickRandomCard() {
+  if (randomCardPool.length === 0) {
+    randomCardPool = [...RANDOM_CARDS].sort(() => Math.random() - 0.5);
+  }
+  return randomCardPool.pop();
+}
+
+function renderRandomCard(cardKey) {
+  const card = pickRandomCard();
+  const nextEvent = CARD_SCHEDULE[cardKey];
+  scene.innerHTML = `
+    <div class="card-screen">
+      <div class="card-label">◆ 隨機事件 ‧ Random Event ◆</div>
+      <div class="event-card">
+        <div class="card-number">No. ${card.n}</div>
+        <div class="card-title">${card.title}</div>
+        <div class="card-desc">${card.desc}</div>
+      </div>
+      <div class="choices" style="max-width:480px;margin:0 auto;">
+        ${card.choices.map((c, i) => `
+          <button class="choice-btn" data-i="${i}">
+            <span class="choice-letter">${c.label}.</span>${c.text}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  scene.querySelectorAll('.choice-btn').forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      const c = card.choices[i];
+      applyEffects(c.effects, c.spend);
+      showEffectFlash(c.effects);
+      state.history.push({ eventId: 'card-' + card.n, label: c.label, text: c.text });
+      setTimeout(() => goNext(nextEvent), 700);
+    });
+  });
+}
+
+function goNext(target) {
+  if (target === 'card1' || target === 'card2' || target === 'card3') {
+    renderRandomCard(target);
+  } else if (target === 'prelim_reveal') {
+    renderPreliminaryReveal();
+  } else if (target === 'complex_reveal') {
+    renderComplexReveal();
+  } else {
+    renderEvent(target);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+/* =====================================================
+   REFUSED ENDING (拒考路徑)
+===================================================== */
+function renderRefusedEnding() {
+  document.body.classList.add('hide-header');
+  if (!state.dataSent) {
+    sendDataToSheet('refused');
+    state.dataSent = true;
+  }
+  scene.innerHTML = `
+    <div class="refused-screen">
+      <div class="scene-chapter">獨立結局 ‧ The Quiet Path</div>
+      <h2 class="scene-title" style="font-family:'ZCOOL XiaoWei',serif;font-size:2rem;margin:30px 0;">
+        你尊重了孩子的選擇
+      </h2>
+      <div class="scene-narrative" style="border-left-color:var(--sage);max-width:520px;margin:0 auto 30px;">
+        他鬆了一口氣，你看見他臉上久違的笑容。<br><br>
+        沒有大滿貫、沒有保證班、沒有半夜亮著的燈。<br>
+        他像所有十二歲的孩子一樣，在週末騎腳踏車去公園，
+        在書店翻自己喜歡的書，在飯桌上講今天學校發生的趣事。
+      </div>
+      <div class="reality-block" style="max-width:520px;margin:30px auto;">
+        <div class="reality-title">沒考鑑定，等於不是資優生嗎？</div>
+        <div class="reality-item">
+          《特殊教育學生及幼兒鑑定辦法》第 17 條列出<strong>四種</strong>學術性向資優鑑定基準：性向／成就測驗、學科競賽、研究輔導、獨立研究成果——<em>考試只是其中之一</em>。
+        </div>
+        <div class="reality-item">
+          受訪者四提到：「資優班考試只能考出一個人對於這個領域的了解、精熟程度。」——通過鑑定不等於資優，沒去考也不等於不是。
+        </div>
+      </div>
+      <div class="ending-quote" style="margin:30px auto;">
+        <div class="ending-quote-intro">${REFUSED_QUOTE.intro}</div>
+        <div class="ending-quote-text">「${REFUSED_QUOTE.text}」</div>
+        <div class="ending-quote-from">— ${REFUSED_QUOTE.from}</div>
+      </div>
+      <div class="final-message">
+        <div class="final-text">
+          有時候，<br>
+          <em>不去證明</em>什麼，<br>
+          才是真正的勇氣。
+        </div>
+        <div class="button-row">
+          <button class="restart-btn" onclick="restartGame()">再玩一次</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* =====================================================
+   PRELIMINARY REVEAL (初選 PR 揭曉)
+===================================================== */
+function renderPreliminaryReveal() {
+  document.body.classList.add('hide-header');
+  state.passedPreliminary = state.innatePR >= 97;
+
+  scene.innerHTML = `
+    <div class="reveal-screen">
+      <div class="reveal-prefix">初選性向測驗結果即將揭曉⋯⋯</div>
+      <div class="reveal-number" id="revealNum">--</div>
+      <div class="reveal-label">這是你孩子在性向測驗的 PR 值</div>
+      <div class="reveal-truth" id="revealTruth" style="opacity:0;">
+        性向測驗 ≥ PR 97，才取得複選資格。<br>
+        但通過鑑定，<em>就代表他是資優生</em>嗎？
+      </div>
+      <div id="prelimVerdict" style="margin-top:40px;opacity:0;"></div>
+      <button class="reveal-continue" id="prelimContinue" style="opacity:0;" onclick="proceedAfterPrelim()">繼續</button>
+    </div>
+  `;
+  setTimeout(() => document.body.classList.add('reveal-mode'), 300);
+
+  let current = 30;
+  const target = state.innatePR;
+  const el = document.getElementById('revealNum');
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      if (current >= target) {
+        current = target;
+        el.textContent = current;
+        clearInterval(interval);
+        setTimeout(showPrelimVerdict, 1000);
+      } else {
+        current += Math.max(1, Math.floor((target - current) / 8));
+        el.textContent = current;
+      }
+    }, 80);
+  }, 1500);
+}
+
+function showPrelimVerdict() {
+  document.getElementById('revealTruth').style.transition = 'opacity 1.5s ease';
+  document.getElementById('revealTruth').style.opacity = '1';
+
+  setTimeout(() => {
+    const verdict = document.getElementById('prelimVerdict');
+    if (state.passedPreliminary) {
+      verdict.innerHTML = `
+        <div style="font-family:'ZCOOL XiaoWei',serif;font-size:1.6rem;color:var(--gold-light);margin-bottom:10px;">
+          ✓ 通過初選
+        </div>
+        <div style="font-size:0.95rem;color:rgba(243,234,215,0.7);max-width:420px;margin:0 auto;line-height:1.8;">
+          性向測驗 PR ≥ 97，孩子取得了複選資格。<br>
+          但這還沒結束⋯⋯<br>
+          <span style="opacity:0.6;font-size:0.85rem;">（115 學年北市複選通過率約 50–65%）</span>
+        </div>
+      `;
+    } else {
+      verdict.innerHTML = `
+        <div style="font-family:'ZCOOL XiaoWei',serif;font-size:1.6rem;color:var(--accent-light);margin-bottom:10px;">
+          ✗ 未通過初選
+        </div>
+        <div style="font-size:0.95rem;color:rgba(243,234,215,0.7);max-width:420px;margin:0 auto;line-height:1.8;">
+          性向測驗 PR < 97，連複選的門票都沒拿到。<br>
+          這場考試，在第一關就結束了。
+        </div>
+      `;
+    }
+    verdict.style.transition = 'opacity 1.5s ease';
+    verdict.style.opacity = '1';
+
+    setTimeout(() => {
+      const btn = document.getElementById('prelimContinue');
+      btn.style.transition = 'opacity 1s ease';
+      btn.style.opacity = '1';
+    }, 1500);
+  }, 1500);
+}
+
+function proceedAfterPrelim() {
+  if (state.passedPreliminary) {
+    // 進入複選衝刺期
+    document.body.classList.remove('reveal-mode');
+    document.body.classList.remove('hide-header');
+    state.phase = 'complex';
+    renderEvent('e61');
+  } else {
+    // 沒過初選，直接結局
+    state.passedComplex = false;
+    state.finalComplexScore = 0;
+    renderEndingFlow();
+  }
+}
+
+/* =====================================================
+   COMPLEX REVEAL (複選實作評量揭曉)
+===================================================== */
+function renderComplexReveal() {
+  document.body.classList.add('hide-header');
+  calculateFinalComplexScore();
+  state.passedComplex = state.finalComplexScore >= 55;  // 門檻 55,對應北市約 55% 通過率
+
+  scene.innerHTML = `
+    <div class="reveal-screen">
+      <div class="reveal-prefix">複選實作評量分數即將揭曉⋯⋯</div>
+      <div class="reveal-number" id="revealNum">--</div>
+      <div class="reveal-label">這是孩子在實作評量的最終分數</div>
+      <div class="reveal-truth" id="revealTruth" style="opacity:0;max-width:540px;">
+        <div id="complexBreakdown"></div>
+      </div>
+      <div id="complexVerdict" style="margin-top:30px;opacity:0;"></div>
+      <button class="reveal-continue" id="complexContinue" style="opacity:0;" onclick="renderEndingFlow()">前往結局</button>
+    </div>
+  `;
+  setTimeout(() => document.body.classList.add('reveal-mode'), 100);
+
+  let current = 0;
+  const target = state.finalComplexScore;
+  const el = document.getElementById('revealNum');
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      if (current >= target) {
+        current = target;
+        el.textContent = current;
+        clearInterval(interval);
+        setTimeout(showComplexVerdict, 1000);
+      } else {
+        current += Math.max(1, Math.floor((target - current) / 8) + 1);
+        if (current > target) current = target;
+        el.textContent = current;
+      }
+    }, 70);
+  }, 1500);
+}
+
+function showComplexVerdict() {
+  const breakdown = state.complexPenalty > 0 ? `
+    <div style="font-size:0.9rem;line-height:1.9;opacity:0.85;">
+      孩子在實作評量的基礎分數是 ${state.innateComplexScore} 分。<br>
+      因為健康／心情過低，臨場表現被扣了 <em>−${state.complexPenalty}</em> 分。<br>
+      <span style="font-size:0.8rem;opacity:0.6;">補習補的是學科精熟，但壓力會把臨場表現拉下來。</span>
+    </div>
+  ` : `
+    <div style="font-size:0.9rem;line-height:1.9;opacity:0.85;">
+      孩子在實作評量的基礎分數是 ${state.innateComplexScore} 分。<br>
+      你守住了他的身心狀態，<em>沒有 penalty 扣分</em>。<br>
+      <span style="font-size:0.8rem;opacity:0.6;">這是你做對的事。</span>
+    </div>
+  `;
+  document.getElementById('complexBreakdown').innerHTML = breakdown;
+  document.getElementById('revealTruth').style.transition = 'opacity 1.5s ease';
+  document.getElementById('revealTruth').style.opacity = '1';
+
+  setTimeout(() => {
+    const verdict = document.getElementById('complexVerdict');
+    if (state.passedComplex) {
+      verdict.innerHTML = `
+        <div style="font-family:'ZCOOL XiaoWei',serif;font-size:1.6rem;color:var(--gold-light);">
+          ✓ 通過複選 ‧ 安置入班
+        </div>
+      `;
+    } else {
+      verdict.innerHTML = `
+        <div style="font-family:'ZCOOL XiaoWei',serif;font-size:1.6rem;color:var(--accent-light);">
+          ✗ 未通過複選
+        </div>
+        <div style="font-size:0.9rem;color:rgba(243,234,215,0.6);margin-top:8px;">
+          差 ${55 - state.finalComplexScore} 分。
+        </div>
+      `;
+    }
+    verdict.style.transition = 'opacity 1.5s ease';
+    verdict.style.opacity = '1';
+
+    setTimeout(() => {
+      const btn = document.getElementById('complexContinue');
+      btn.style.transition = 'opacity 1s ease';
+      btn.style.opacity = '1';
+    }, 1500);
+  }, 1500);
+}
+
+/* =====================================================
+   ENDING FLOW
+===================================================== */
+let endingStep = 0;
+
+/* 9 種主結局 + 拒考的專屬引言，每個結局對應不同的訪談金句 */
+const ENDING_QUOTES = {
+  prelim_fail_high: {
+    intro: '一個資優生，應該長什麼樣子？',
+    text: '對他資優的科目很有熱忱或很有天份，對那個科目感興趣，願意自己花時間投入。',
+    from: '受訪者三・高中語文資優班'
+  },
+  prelim_fail_mid: {
+    intro: '在懊惱「為什麼沒考上」之前，先停下來問——',
+    text: '資優是啥？是一個人有天賦嗎？那有天賦又是什麼呢？成績好就是天份嗎？我覺得不是啦。',
+    from: '受訪者四・高中語文資優班'
+  },
+  prelim_fail_low: {
+    intro: '這場考試的結果，不能定義他。',
+    text: '真正的資優生不會走普通的教育體系⋯⋯不管有沒有資優鑑定都是天才。',
+    from: '受訪者二・國中數理資優班'
+  },
+  complex_fail_high: {
+    intro: '你保護的，是這個——',
+    text: '老師講一遍就能融會貫通，懂得提取大腦裡面的東西解決題目。別人花很多精力做的事情，他很少就能做好。',
+    from: '受訪者一・高中語文資優班'
+  },
+  complex_fail_mid: {
+    intro: '差的不是分數，是還沒被你問過的問題——',
+    text: '資優是啥？是一個人有天賦嗎？成績好就是天份嗎？我覺得不是啦。',
+    from: '受訪者四・高中語文資優班'
+  },
+  complex_fail_low: {
+    intro: '你越用力，他離資優越遠。',
+    text: '台灣的資優教育或許有天才，但更多是培養出績優的學生。',
+    from: '受訪者二・國中數理資優班'
+  },
+  pass_high: {
+    intro: '通過鑑定是第一步。第二步是——',
+    text: '成績好的人你不能說他沒天份，但他只是成績好。',
+    from: '受訪者四・高中語文資優班'
+  },
+  pass_mid: {
+    intro: '上岸了，但回頭看看你的班上——',
+    text: '我相信一定有資優生，但我覺得我們班沒有真正的資優生，只是成績好而已。',
+    from: '受訪者一・高中語文資優班'
+  },
+  pass_low: {
+    intro: '你贏到了什麼？',
+    text: '台灣的資優教育或許有天才，但更多是培養出績優的學生。',
+    from: '受訪者二・國中數理資優班'
+  }
+};
+
+const REFUSED_QUOTE = {
+  intro: '天份和成績，是兩回事。',
+  text: '我覺得我自己是對國文有點天份和興趣（癡情的那種哦），但是我成績就很爛啊哈哈哈哈。',
+  from: '受訪者四・高中語文資優班'
+};
+
+function renderEndingFlow() {
+  endingStep = 0;
+  document.body.classList.remove('reveal-mode');
+  document.body.classList.remove('hide-header');
+  showEndingStep();
+}
+
+function showEndingStep() {
+  endingStep++;
+  renderCurrentEndingStep(1);
+}
+
+function prevEndingStep() {
+  endingStep--;
+  if (endingStep < 1) endingStep = 1;
+  renderCurrentEndingStep(-1);
+}
+
+function renderCurrentEndingStep(direction) {
+  switch (endingStep) {
+    case 1: renderSunkCost(); break;
+    case 2: renderQuoteReplay(direction); break;
+    case 3: renderEndingCard(); break;
+    case 4: renderReality(); break;
+    case 5: renderFinalMessage(); break;
+    case 6: renderClosure(); break;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* 結局頁通用導航列。Step 1 沒有上一頁；Step 5 由呼叫者自訂前進按鈕 */
+function endingNavRow(opts) {
+  opts = opts || {};
+  const showBack = endingStep > 1;
+  const backBtn = showBack
+    ? '<button class="restart-btn nav-back" onclick="prevEndingStep()">← 上一頁</button>'
+    : '';
+  const forward = opts.forward !== undefined
+    ? opts.forward
+    : '<button class="restart-btn" onclick="showEndingStep()">繼續</button>';
+  return `<div class="button-row">${backBtn}${forward}</div>`;
+}
+
+function renderSunkCost() {
+  const { mood, health, grade } = state.resources;
+  const moodDelta = mood - 50;
+  const healthDelta = health - 50;
+
+  // ---- Q4 初選結果敘述 ----
+  const aboveTopPct = 100 - state.innatePR;
+  const q4Verdict = state.passedPreliminary
+    ? '通過初選 ✓ ‧ 性向測驗 ≥ PR 97'
+    : '未通過初選 ✗ ‧ 性向測驗未達 PR 97';
+  const q4Answer = `
+    <span class="qa-big">PR ${state.innatePR}</span>
+    <span class="qa-meta">${q4Verdict}</span>
+    <div style="margin-top:10px;font-size:0.86rem;line-height:1.9;color:var(--ink-soft);">
+      PR 是百分等級（percentile rank），代表他的分數高於同年齡<strong style="color:var(--accent);">${state.innatePR}%</strong> 的考生（亦即<strong style="color:var(--accent);">約前 ${aboveTopPct}%</strong>）。<br>
+      初選門檻為 <strong style="color:var(--accent);">PR ≥ 97</strong>——依百分等級定義，全國<strong style="color:var(--accent);">每 100 名考生中，約僅有 3 人</strong>能達到這個門檻。
+    </div>
+  `;
+
+  // ---- Q5 複選結果敘述 ----
+  let q5Item = '';
+  if (state.passedPreliminary) {
+    const penaltyLine = state.complexPenalty > 0
+      ? `<br>因健康／心情過低，臨場 penalty 扣了 <em>−${state.complexPenalty}</em> 分。`
+      : `<br>你守住了他的身心狀態，<strong>沒有 penalty 扣分</strong>。`;
+    const verdict = state.passedComplex
+      ? `通過複選 ✓ ‧ 安置入班`
+      : `未通過複選 ✗ ‧ 差 ${Math.max(0, 55 - state.finalComplexScore)} 分`;
+    q5Item = `
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q5．他通過複選實作評量了嗎？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          <span class="qa-big">${state.finalComplexScore}</span>
+          <span class="qa-meta">分 ‧ ${verdict}</span>
+          <div style="margin-top:6px;">基礎分 ${state.innateComplexScore} 分${penaltyLine}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  scene.innerHTML = `
+    <div class="qa-block">
+      <div class="qa-section-title">A 區 ‧ 你的選擇紀錄</div>
+      <div class="qa-section-hint">點開每一題，看你做了什麼</div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q1．你這一年為這場考試付出了多少錢？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          <span class="qa-big">${formatMoney(state.moneySpent)}</span>
+          <div style="margin-top:6px;">花在補習班、教材、營隊、保證班的總投入。</div>
+        </div>
+      </div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q2．他有多少個夜晚是不快樂的？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          <span class="qa-big">${state.moodLowCount}</span>
+          <span class="qa-meta">次 ‧ 心情低於 30 的次數</span>
+          ${state.moodLowCount > 2 ? '<div style="margin-top:6px;">超過 2 次的低落，是個值得注意的訊號。</div>' : ''}
+        </div>
+      </div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q3．這一年下來，他的身心狀態如何？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          🩺 健康 <strong>${health}</strong>（${healthDelta >= 0 ? '+' : ''}${healthDelta}）<br>
+          🌸 心情 <strong>${mood}</strong>（${moodDelta >= 0 ? '+' : ''}${moodDelta}）<br>
+          📚 學科成績 <strong>${grade}</strong>（${grade - 50 >= 0 ? '+' : ''}${grade - 50}）<br>
+          <span class="qa-meta">起始值皆為 50。</span>
+        </div>
+      </div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q4．他通過初選性向測驗了嗎？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          ${q4Answer}
+        </div>
+      </div>
+
+      ${q5Item}
+    </div>
+    ${endingNavRow()}
+  `;
+  attachQAHandlers();
+}
+
+function attachQAHandlers() {
+  scene.querySelectorAll('.qa-item[data-qa]').forEach(item => {
+    const q = item.querySelector('.qa-question');
+    q.addEventListener('click', () => item.classList.toggle('open'));
+  });
+}
+
+function renderQuoteReplay(direction) {
+  direction = direction || 1;
+  if (!state.q27_answer) {
+    // 沒有 q27 紀錄就在當前方向上跳過
+    endingStep += direction;
+    if (endingStep < 1) endingStep = 1;
+    renderCurrentEndingStep(direction);
+    return;
+  }
+
+  let q41Attribution = '';
+  if (state.q41_answer) {
+    const overallPass = state.passedPreliminary && state.passedComplex;
+    if (overallPass && (state.q41_answer.includes('一定') || state.q41_answer.includes('應該'))) {
+      q41Attribution = '— 你猜對了，但這不代表你做對了。';
+    } else if (!overallPass && state.q41_answer.includes('不會')) {
+      q41Attribution = '— 你心底其實知道。';
+    } else if (!overallPass && state.q41_answer.includes('一定')) {
+      q41Attribution = '— 你錯了。';
+    } else {
+      q41Attribution = '— 現實如此。';
+    }
+  }
+
+  scene.innerHTML = `
+    <div class="ending-screen">
+      <div class="quote-block">
+        <div class="quote-intro">還記得那個晚上，孩子問你為什麼一定要考資優班嗎？</div>
+        <div class="quote-text">${state.q27_answer}</div>
+        <div class="quote-attribution">— 這是你告訴他的話。</div>
+      </div>
+      ${state.q41_answer ? `
+        <div class="quote-block" style="border-top:1px dashed var(--ink-mute);padding-top:30px;margin-top:30px;">
+          <div class="quote-intro">而複選那天，你心裡想的是⋯⋯</div>
+          <div class="quote-text" style="font-size:1.2rem;">${state.q41_answer}</div>
+          <div class="quote-attribution">${q41Attribution}</div>
+        </div>` : ''}
+      ${endingNavRow()}
+    </div>
+  `;
+}
+
+function determineEnding() {
+  const familyHealth = state.resources.mood + state.resources.health;
+  const familyTier = familyHealth >= 100 ? 'high' : familyHealth >= 50 ? 'mid' : 'low';
+
+  let resultTier;
+  if (!state.passedPreliminary) resultTier = 'prelim_fail';
+  else if (!state.passedComplex) resultTier = 'complex_fail';
+  else resultTier = 'pass';
+
+  const key = resultTier + '_' + familyTier;
+
+  const endings = {
+    // 沒過初選
+    prelim_fail_high: {
+      icon: '🌿',
+      title: '一個十二歲的禮物',
+      sub: 'The Best You Could Give',
+      text: '孩子沒有通過初選——但你看著他，心情還在，健康還在，他還會在飯桌上跟你聊天，還會跟同學打球。<br><br>沒進資優班，不代表他不是資優生。鑑定辦法明列<strong>四種</strong>學術性向資賦優異基準（測驗、競賽、研究、推薦），考試只是其中之一。<br><br>多年後他會記得的，不是那張不存在的錄取通知，而是這一年你陪他做過的事。'
+    },
+    prelim_fail_mid: {
+      icon: '😔',
+      title: '白忙一場？',
+      sub: 'For Nothing?',
+      text: '孩子沒有通過初選。<br><br>你大概會懊惱：「再加一科會不會就過了？」「補習班是不是不夠好？」<br><br>但請記得——資優鑑定有四種基準，性向測驗只是其中之一。被測驗篩掉，也可能是<strong>雙重殊異</strong>或<strong>偏才</strong>學生會遇到的情況。<br><br>把那份懊惱放下吧。孩子需要的，是你看見他真正的樣子。'
+    },
+    prelim_fail_low: {
+      icon: '💸',
+      title: '輸了兩次',
+      sub: 'The Worst of Both Worlds',
+      text: '孩子沒有通過初選。<br><br>你花了 ${moneySpent}，他的身心狀態都崩了，而結果？連複選的門票都沒拿到。<br><br>補習可以提高他對學科的精熟程度，但<strong>不能補出資優特質</strong>——強烈的好奇、自發探索的熱忱，這些是 Dabrowski 所說的「智識性過度激動」，不是後天訓練得來的。<br><br>但現在停下來，還來得及。十二歲的他還有很多路要走。'
+    },
+    // 過初選但複選沒過
+    complex_fail_high: {
+      icon: '🌱',
+      title: '差一步，但你贏了',
+      sub: 'A Loss That Wasn\'t One',
+      text: '孩子通過了初選，卻在複選實作評量止步。差了 ${gap} 分。<br><br>你會難過，但請看看他——他的眼神還是亮的，他還會笑。<br><br>你做對了一件最難的事：在所有人都在加碼的時候，你選擇了保護他的身心。沒有 penalty 扣分，這份分數，就是他現在真實的表現。<br><br>沒進資優班沒關係，他還是那個聰明、健康、被你愛著的孩子。'
+    },
+    complex_fail_mid: {
+      icon: '😞',
+      title: '只差一點點',
+      sub: 'So Close',
+      text: '孩子通過初選，但複選沒過。<br><br>你心裡會反覆想：「如果再補一個保證班、再熬一週夜，他會不會就過了？」<br><br>看看他的健康和心情扣的 −${penalty} 分——那才是他真正失分的地方。複選實作評量考的是<strong>臨場反應與心理素質</strong>，再加碼補習，只會讓他更累，分數只會更低。<br><br>你已經盡力。請把這個結果，當作他真實狀態的一個誠實答案。'
+    },
+    complex_fail_low: {
+      icon: '💔',
+      title: '錢花了，人也散了',
+      sub: 'A Costly Defeat',
+      text: '孩子通過初選，但複選沒過——而且，他可能本來能過。<br><br>因為你在最後階段加碼，他的健康和心情崩了，臨場被扣 ${penalty} 分。如果這 ${penalty} 分還在，他就過了。<br><br>這是這款遊戲最諷刺的部分：<em>你越加碼補習，他離資優班越遠</em>。複選是實作評量，補習補不出臨場——只會把臨場拖垮。<br><br>下次，請相信他原本的狀態。'
+    },
+    // 全過
+    pass_high: {
+      icon: '🌟',
+      title: '上岸了，但他是「資優」還是「績優」？',
+      sub: 'The Real Question',
+      text: '孩子通過了初選與複選，正式安置入資優班。你也守住了家庭。<br><br>但有一個問題，請你也問問自己——<br>他通過鑑定，是因為他真的對這個領域有<strong>強烈的好奇、自發的熱忱</strong>，還是只是<em>「對這個學科的精熟度夠高」</em>？<br><br>受訪者四說：「資優班考試只能考出一個人對於這個領域的了解、精熟程度。」——通過鑑定，不必然等於「資優」。'
+    },
+    pass_mid: {
+      icon: '🎓',
+      title: '上岸了',
+      sub: 'Made It',
+      text: '孩子通過初選與複選。家裡有點累，但還能繼續。<br><br>你大概會把這個結果歸功於補習、營隊、保證班。但 Renzulli 提醒我們，資優行為由<strong>中等以上智力、高度工作熱忱、高度創造力</strong>三者構成——補習能提高的，只是其中很有限的一塊。<br><br>下一個問題或許更值得想：他在資優班裡，會是「資優」還是「績優」？'
+    },
+    pass_low: {
+      icon: '💔',
+      title: '得不償失的勝利',
+      sub: 'A Pyrrhic Victory',
+      text: '孩子通過了——但你環顧四週，他不快樂、健康受損、家庭氣氛緊繃。<br><br>而且，你差點因為過度加碼，扣掉他複選 ${penalty} 分。<br><br>那些保證班、那些深夜的複習、那些他不快樂的日子——換來的是一個資優班的位子，但代價是他的<strong>學習動機</strong>與對該領域的<strong>熱忱</strong>，這些剛好是 Renzulli 三元論中「工作熱忱」的核心。<br><br>你以為是補習換來的，可能只是<em>他原本就有的精熟度</em>，被你用焦慮逼到了極限。'
+    }
+  };
+
+  const ending = endings[key];
+  ending.key = key;
+  ending.text = ending.text
+    .replace(/\$\{innatePR\}/g, state.innatePR)
+    .replace(/\$\{moneySpent\}/g, formatMoney(state.moneySpent))
+    .replace(/\$\{penalty\}/g, state.complexPenalty)
+    .replace(/\$\{innateComplex\}/g, state.innateComplexScore)
+    .replace(/\$\{gap\}/g, 55 - state.finalComplexScore);
+  return ending;
+}
+
+function renderEndingCard() {
+  const ending = determineEnding();
+  if (!state.dataSent) {
+    sendDataToSheet(ending.key);
+    state.dataSent = true;
+  }
+  scene.innerHTML = `
+    <div class="ending-screen">
+      <div class="ending-card">
+        <div class="ending-icon">${ending.icon}</div>
+        <div class="ending-title">${ending.title}</div>
+        <div class="ending-subtitle">${ending.sub}</div>
+        <div class="ending-text">${ending.text}</div>
+      </div>
+      ${endingNavRow()}
+    </div>
+  `;
+}
+
+function renderReality() {
+  scene.innerHTML = `
+    <div class="qa-block">
+      <div class="qa-section-title">B 區 ‧ 研究結論</div>
+      <div class="qa-section-hint">點開每一題，看我們的研究發現</div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q1．什麼樣的學生算是「學術性向資優」？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          依《特殊教育學生及幼兒鑑定辦法》第 17 條，學術性向資優指<strong>「在語文、數學、社會科學或自然科學等學術領域，較同年齡者具有卓越潛能或傑出表現」</strong>，其鑑定基準有<em>四種</em>：
+          <ol style="margin:10px 0 6px 22px;line-height:2;">
+            <li>性向或成就測驗達<strong>平均數正二個標準差</strong>或<strong>百分等級 97 以上</strong>，並經專家／教師／家長推薦並附具體資料。</li>
+            <li>參加政府或學術機構舉辦之國際性或全國性<strong>學科競賽或展覽</strong>，獲<strong>前三等獎項</strong>。</li>
+            <li>參加學術機構長期輔導的<strong>學科研習活動</strong>，成就特別優異並經主辦單位推薦。</li>
+            <li><strong>獨立研究成果</strong>優異並刊載於學術性刊物，經專家或教師推薦並附資料。</li>
+          </ol>
+          也就是說：<em>「考試」只是四種管道之一</em>。
+          <span class="qa-cite">資料來源：《特殊教育學生及幼兒鑑定辦法》第 17 條</span>
+        </div>
+      </div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q2．真正的資優生有什麼特質？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          <strong>Renzulli 資優三元論</strong>主張，資賦優異行為的產生有三個要素：
+          <ul style="margin:8px 0 10px 22px;line-height:2;">
+            <li><strong>中等程度以上的智力</strong>（在任一領域達前 15–20%）</li>
+            <li><strong>高度的工作熱忱</strong>（task commitment）</li>
+            <li><strong>高度的創造力</strong>（creativity）</li>
+          </ul>
+          <strong>Dabrowski 過度激動理論（OE）</strong>進一步指出，資優個體在五個向度展現高度敏感與強烈反應：心理動作、感官、<em>智識</em>、想像、情感。其中<em>智識性過度激動</em>表現為：強烈的好奇心、自發探索驅力、傾向主動追問「為什麼」。
+          <div class="qa-interview">
+            老師講一遍就能融會貫通，連結過去知識懂得如何應用。懂得提取大腦裡面的東西解決題目。
+            <span class="qa-interview-from">— 受訪者一・高中語文資優班</span>
+          </div>
+          <div class="qa-interview">
+            真正的資優生不會走普通的教育體系⋯⋯以數學來說，就是具備解開謎題的能力。
+            <span class="qa-interview-from">— 受訪者二・國中數理資優班</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q3．資優生一定成績好嗎？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          不一定。<strong>Gagné 的 DMGT 模式</strong>把人們區分為兩個概念：與生俱來、偏向天賦能力的「<em>潛能</em>（giftedness）」，以及這份潛能後續發展出來的「<em>才能</em>（talent）」。潛能 → 才能不是線性的，需要長期累積、練習、投入。<br><br>
+          因此會出現一種類型：<strong>低成就資優生</strong>——能力與實際成就有明顯落差，標準化成就測驗與智力測驗相差 1–2 個標準差。<br><br>
+          另一個情況是<strong>雙重殊異學生</strong>（2e）：例如學障學生中出現資優生的比率與一般生相近（約 2.3%），他們可能具有高度智力或極好的邏輯／空間能力，卻因為算術或閱讀理解困難，在學校考試中無法顯現真實能力。
+          <div class="qa-interview">
+            我覺得我們班同學有的是資優，他們是在國文上真的很有造詣也很有敏感的天份，但是他們成績確實不怎麼好，而且<em>潛能很容易被成果表現覆蓋掉</em>。
+            <span class="qa-interview-from">— 受訪者四・高中語文資優班</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q4．為什麼大家會把「資優」跟「績優」混為一談？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          根源是<strong>升學主義</strong>。郭靜姿教授曾指出：在升學主義影響下，「資優教育」與「績優教育」混淆不清，教師與家長在學習評量上多要求學生「資優必須績優」，無形中提高了課業壓力，阻礙了思考教育與情意教育的推展。<br><br>
+          甚至有學生被鑑定為某類資優之後，自己不相信、家長也驚訝——因為他那個科目的考試成績並不好。
+          <div class="qa-interview">
+            我相信一定有資優生，但我覺得我們班沒有真正的資優生，只是成績好而已。
+            <span class="qa-interview-from">— 受訪者一・高中語文資優班</span>
+          </div>
+          <div class="qa-interview">
+            台灣的資優教育或許有天才，但更多是培養出績優的學生。
+            <span class="qa-interview-from">— 受訪者二・國中數理資優班</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q5．那補習到底有沒有用？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          訪談多位資優班學生後，多數受訪者表示：補習<strong>確實</strong>有助於通過鑑定。<br><br>
+          現行鑑定在初試階段高度仰賴標準化的學科成就測驗（語文能力測驗、數學性向測驗），而紙筆測驗測量的是學生對知識的<em>精熟度</em>與<em>先備知識的廣度</em>。補習班透過大量刷題、超修進度、分析考古題，能極大化標準化測驗上的表現。
+          <div class="qa-interview">
+            資優班考試只能考出一個人對於這個領域的了解、精熟程度。
+            <span class="qa-interview-from">— 受訪者四・高中語文資優班</span>
+          </div>
+          <div class="qa-interview">
+            考資優班不外乎是考古題，會有專門蒐集考古題的資優班，甚至連面試考題都很相近。
+            <span class="qa-interview-from">— 受訪者五</span>
+          </div>
+          但<strong>補習提高的是「績優」，不是「資優」</strong>。Dabrowski 提到的智識性過度激動，是天賦固有的特質而不是後天訓練的結果——補習或許可以增加學科成就，卻無法讓學生對同一領域保持強烈的好奇，甚至於願意投入時間心力去探索或解決問題。
+        </div>
+      </div>
+
+      <div class="qa-item" data-qa>
+        <div class="qa-question">
+          <span class="qa-q-text">Q6．臺北市實際的鑑定通過率是多少？</span>
+          <span class="qa-toggle">+</span>
+        </div>
+        <div class="qa-answer">
+          臺北市近四年國中學術性向資優<strong>複選</strong>通過率（分母為已通過初選的學生）：
+          <table class="qa-table">
+            <thead>
+              <tr><th>學年度</th><th>國文</th><th>英語</th><th>數理</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>112</td><td>62.34%</td><td>55.90%</td><td>60.51%</td></tr>
+              <tr><td>113</td><td>76.92%</td><td>53.69%</td><td>68.83%</td></tr>
+              <tr><td>114</td><td>60.62%</td><td>54.13%</td><td>61.70%</td></tr>
+              <tr class="qa-row-latest"><td>115</td><td>49.51%</td><td>65.38%</td><td>55.85%</td></tr>
+            </tbody>
+          </table>
+          <span class="qa-cite">資料整理：與謙同行的教養雜談 ‧ 原始來源：臺北市教育局</span>
+        </div>
+      </div>
+    </div>
+    ${endingNavRow()}
+  `;
+  attachQAHandlers();
+}
+
+function renderFinalMessage() {
+  const ending = determineEnding();
+  const q = ENDING_QUOTES[ending.key] || ENDING_QUOTES.pass_mid;
+  scene.innerHTML = `
+    <div class="ending-screen">
+      <div class="final-message">
+        <div class="final-text">
+          補習或許能考進「<em>資優班</em>」，<br>
+          但不一定能補出「<em>資優生</em>」。
+        </div>
+        <div class="ending-quote">
+          <div class="ending-quote-intro">${q.intro}</div>
+          <div class="ending-quote-text">「${q.text}」</div>
+          <div class="ending-quote-from">— ${q.from}</div>
+        </div>
+        <div class="final-sub">
+          這款遊戲不是要否定努力，<br>
+          也不是要妖魔化補習班。<br>
+          它要拆穿的是一個常見的因果錯覺：<br>
+          「孩子考上資優班 = 他是資優生」。<br><br>
+          願你下次面對孩子的考試成績時，<br>
+          看見的是孩子，不只是分數。
+        </div>
+        ${endingNavRow()}
+      </div>
+    </div>
+  `;
+}
+
+/* Step 6 — 數據與你的話 */
+function renderClosure() {
+  const s = state.stats; // 可能還是 null
+  // 玩家結果分類
+  let myCategoryLabel = '';
+  let myCategoryNumber = null;
+  let myCategoryTotal = null;
+  if (state.refusedToTest) {
+    myCategoryLabel = '位選擇尊重孩子、不去考的家長';
+    if (s) { myCategoryNumber = s.refusedRank; myCategoryTotal = s.refusedPlayers; }
+  } else if (state.passedPreliminary && state.passedComplex) {
+    myCategoryLabel = '位讓孩子通過完整鑑定的家長';
+    if (s) { myCategoryNumber = s.passRank; myCategoryTotal = s.passedPlayers; }
+  } else if (state.passedPreliminary && !state.passedComplex) {
+    myCategoryLabel = '位走到複選但沒有通過的家長';
+    if (s) { myCategoryNumber = s.complexFailRank; myCategoryTotal = s.complexFailPlayers; }
+  } else {
+    myCategoryLabel = '位沒有通過初選的家長';
+    if (s) { myCategoryNumber = s.prelimFailRank; myCategoryTotal = s.prelimFailPlayers; }
+  }
+
+  const statsBlock = s ? `
+    <div class="stats-section">
+      <div class="stats-headline">
+        <span class="stat-big">${s.playerNumber ? s.playerNumber.toLocaleString() : '—'}</span>
+        <span class="stat-suffix">你是第 ___ 位玩過這個遊戲的玩家</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <div class="stat-cell-num">${s.totalPlayers.toLocaleString()}</div>
+          <div class="stat-cell-label">總玩家數</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-cell-num">${s.passedPlayers.toLocaleString()}</div>
+          <div class="stat-cell-label">通過完整鑑定<br><span style="opacity:0.65;">（${s.totalPlayers ? Math.round(s.passedPlayers / s.totalPlayers * 100) : 0}%）</span></div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-cell-num">${(s.preliminaryPassedPlayers || 0).toLocaleString()}</div>
+          <div class="stat-cell-label">通過初選<br><span style="opacity:0.65;">（${s.totalPlayers ? Math.round((s.preliminaryPassedPlayers || 0) / s.totalPlayers * 100) : 0}%）</span></div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-cell-num">${(s.refusedPlayers || 0).toLocaleString()}</div>
+          <div class="stat-cell-label">選擇不考試</div>
+        </div>
+      </div>
+      ${myCategoryNumber !== null && myCategoryNumber > 0 ? `
+        <div class="my-rank">
+          在 <strong>${(myCategoryTotal || 0).toLocaleString()}</strong> 位同類玩家中，<br>
+          你是第 <strong style="color:var(--accent);font-family:var(--font-num);font-size:1.3rem;font-style:italic;">${myCategoryNumber.toLocaleString()}</strong> ${myCategoryLabel}。
+        </div>
+      ` : ''}
+    </div>
+  ` : `
+    <div class="stats-section stats-loading">
+      <div class="stats-headline" style="opacity:0.55;">
+        <span class="stat-big">—</span>
+        <span class="stat-suffix">統計數據載入中⋯⋯</span>
+      </div>
+      <div style="text-align:center;color:var(--ink-mute);font-size:0.85rem;margin-top:8px;">
+        ${APPS_SCRIPT_URL ? '若一直無法載入，可能是網路或 Apps Script 連線問題。' : '（未設定 APPS_SCRIPT_URL，本機測試模式）'}
+      </div>
+    </div>
+  `;
+
+  const messageBlock = state.messageSent ? `
+    <div class="message-sent">
+      <div class="message-sent-icon">✓</div>
+      <div class="message-sent-text">已送出，謝謝你的分享。</div>
+    </div>
+  ` : `
+    <div class="message-area">
+      <div class="message-prompt">玩完這場遊戲，你想說什麼？</div>
+      <div class="message-prompt-sub">不必填，留言會匿名收進我們的研究資料中。</div>
+      <textarea id="playerMessage" class="message-textarea" placeholder="例如：原來資優跟績優可以這樣區分⋯⋯／我以前也覺得補習就會考上⋯⋯" maxlength="800"></textarea>
+      <div class="message-actions">
+        <span class="message-charcount" id="msgCharCount">0 / 800</span>
+        <button class="send-btn" id="sendMsgBtn" onclick="submitPlayerMessage()">送出留言</button>
+      </div>
+      <div class="message-status" id="msgStatus"></div>
+    </div>
+  `;
+
+  scene.innerHTML = `
+    <div class="ending-screen">
+      <div class="closure-block">
+        <div class="qa-section-title">數據與你的話</div>
+        ${statsBlock}
+        <div class="closure-divider"></div>
+        ${messageBlock}
+      </div>
+      ${endingNavRow({
+        forward: '<button class="restart-btn" onclick="restartGame()">再玩一次</button><button class="restart-btn" onclick="shareGame()">分享給朋友</button>'
+      })}
+    </div>
+  `;
+
+  // 綁字數計數
+  const ta = document.getElementById('playerMessage');
+  if (ta) {
+    ta.addEventListener('input', () => {
+      const n = ta.value.length;
+      document.getElementById('msgCharCount').textContent = n + ' / 800';
+    });
+  }
+
+  // 如果還沒拿到 stats，發起 / 重試一次
+  if (!state.stats && APPS_SCRIPT_URL) {
+    fetchStatsFromSheet();
+  }
+}
+
+function submitPlayerMessage() {
+  const ta = document.getElementById('playerMessage');
+  const btn = document.getElementById('sendMsgBtn');
+  const status = document.getElementById('msgStatus');
+  if (!ta) return;
+  const msg = ta.value.trim();
+  if (!msg) {
+    status.textContent = '請先寫點什麼再送出 :)';
+    status.className = 'message-status warn';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = '送出中⋯⋯';
+  status.textContent = '';
+  sendMessageToSheet(msg).then(ok => {
+    state.messageSent = true;
+    // 重新渲染當前頁，切換為「已送出」狀態
+    renderClosure();
+  });
+}
+
+/* =====================================================
+   CONTROL
+===================================================== */
+function startGame() {
+  state = initialState();
+  state.innatePR = generatePR();              // 一開始就決定
+  state.innateComplexScore = generateComplexScore();  // 一開始就決定
+  randomCardPool = [];
+  document.body.classList.remove('reveal-mode');
+  document.body.classList.remove('hide-header');
+  updateResourceBars();
+  renderEvent('e11');
+}
+
+function restartGame() {
+  state = initialState();
+  document.body.classList.remove('reveal-mode');
+  updateResourceBars();
+  renderIntro();
+}
+
+function shareGame() {
+  const text = '我玩了一款叫《PR 97》的遊戲，結局讓我停了很久。\n推薦你也來體驗一次。';
+  if (navigator.share) {
+    navigator.share({ title: 'PR 97 — 資優？績優！', text }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text + '\n' + location.href);
+    alert('分享文字已複製到剪貼簿！');
+  }
+}
+
+/* =====================================================
+   BOOT
+===================================================== */
+renderIntro();
+</script>
+
+</body>
+</html>
