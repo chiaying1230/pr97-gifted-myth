@@ -1597,7 +1597,7 @@ const EVENTS = {
   e11: {
     chapter: '第一部分 ‧ 小六上學期',
     title: '老師的建議',
-    narrative: '期中家長會結束後，班導留下你說：「您家小孩學科表現優異，排名都在前面，要不要考慮國中資優班？」',
+    narrative: '期中家長會結束後，班導留下你說：「您家小孩學科表現優異，排名都在前面，要不要考慮參加國中資優鑑定？」',
     choices: [
       { label: 'A', text: '好，我馬上物色補習班', effects: { money: -10, grade: 10, mood: -5 }, spend: 10 },
       { label: 'B', text: '謝謝老師，但孩子開心比較重要', effects: { mood: 10 } },
@@ -1619,7 +1619,7 @@ const EVENTS = {
   e13: {
     chapter: '第一部分 ‧ 小六上學期',
     title: '隔壁的「優秀範本」',
-    narrative: '你聽說隔壁小明的哥哥考上某國中數理資優班，前陣子還得了科展大獎。',
+    narrative: '你聽說隔壁小明的哥哥是某國中數理資優班的學生，前陣子還得了科展大獎。',
     choices: [
       { label: 'A', text: '跟孩子分享，並暗示「你也可以」', effects: { grade: 5, mood: -10 } },
       { label: 'B', text: '跟孩子分享，問他有沒有興趣', effects: { mood: 5 } },
@@ -1632,9 +1632,9 @@ const EVENTS = {
   e21: {
     chapter: '第二部分 ‧ 小六下學期',
     title: '孩子的拒絕',
-    narrative: '孩子鄭重對你說：「我不想考資優鑑定，壓力太大了。」',
+    narrative: '孩子鄭重對你說：「我不想申請資優鑑定，壓力太大了。」',
     choices: [
-      { label: 'A', text: '好，不考就不考', effects: {}, special: 'refuse' },
+      { label: 'A', text: '好，不申請就不申請', effects: {}, special: 'refuse' },
       { label: 'B', text: '老師說你很有天賦，還是試試看吧', effects: { mood: -15, grade: 5 } },
       { label: 'C', text: '你先休息一下，我們之後再聊', effects: { mood: 5 } }
     ],
@@ -1643,9 +1643,9 @@ const EVENTS = {
   e22: {
     chapter: '第二部分 ‧ 小六下學期',
     title: '免費營隊',
-    narrative: '鄰居熱心轉告：「某國中辦【金腦袋】免費營隊，專收要考資優班的小孩，快去報名！」',
+    narrative: '鄰居熱心轉告：「某國中辦【金腦袋】免費營隊，專收要申請資優鑑定的小孩，快去報名！」',
     choices: [
-      { label: 'A', text: '不上白不上，立刻報名', effects: { money: -5, grade: 10, mood: -5 }, spend: 5 },
+      { label: 'A', text: '不上白不上，立刻報名', effects: { grade: 10, mood: -5 }, spend: 5 },
       { label: 'B', text: '孩子說沒興趣，不報', effects: { mood: 5 } }
     ],
     next: 'e23'
@@ -1653,7 +1653,7 @@ const EVENTS = {
   e23: {
     chapter: '第二部分 ‧ 小六下學期',
     title: '補習班招生說明會',
-    narrative: '你參加了一場補習班說明會。台上的老師說：「我們去年送進資優班的學生有 <em>87%</em> 都上了！」桌上擺著厚厚的講義和限時優惠方案。',
+    narrative: '你參加了一場補習班說明會。台上的老師說：「我們去年送進資優班的學生有 <em>87%</em> 都上了衝刺班！」桌上擺著厚厚的講義和限時優惠方案。',
     choices: [
       { label: 'A', text: '簽下「資優保證班」全套課程', effects: { money: -30, grade: 15, mood: -10 }, spend: 30 },
       { label: 'B', text: '只報週末單科加強', effects: { money: -15, grade: 8, mood: -5 }, spend: 15 },
@@ -1701,7 +1701,7 @@ const EVENTS = {
   e41: {
     chapter: '第四部分 ‧ 國中初選衝刺期',
     title: '報名表 & 推薦表',
-    narrative: '七年級開學，10 月初要報名資優鑑定。報名表附了一張<em>家長觀察推薦表</em>，你拿起筆。',
+    narrative: '七年級開學，10 月初要報名資優鑑定。報名表附了一張<em>家長觀察推薦表</em>，你拿起筆寫下。',
     choices: [
       { label: 'A', text: '孩子用功努力，是成績優異的資優生', effects: { grade: 10 } },
       { label: 'B', text: '孩子愛問問題，對自然觀察特別有興趣', effects: { mood: 5 } },
@@ -1712,7 +1712,7 @@ const EVENTS = {
   e42: {
     chapter: '第四部分 ‧ 國中初選衝刺期',
     title: '孩子的疑問',
-    narrative: '某天晚上，孩子放下筆抬頭問你：「爸爸/媽媽，為什麼一定要考資優班？」',
+    narrative: '某天晚上，孩子放下筆抬頭問你：「爸爸/媽媽，為什麼一定要通過資優鑑定？」',
     choices: [
       { label: 'A', text: '因為這樣未來的路會比較好走', effects: {}, record: 'q27', answer: '因為這樣未來的路會比較好走。' },
       { label: 'B', text: '因為我們花了很多錢，你要對得起這些投入', effects: {}, record: 'q27', answer: '因為我們花了很多錢，你要對得起這些投入。' },
@@ -1723,10 +1723,10 @@ const EVENTS = {
   e43: {
     chapter: '第四部分 ‧ 國中初選衝刺期',
     title: '性向測驗的最後加強',
-    narrative: '初選只剩三週。性向測驗考的是<em>邏輯推理、數學性向、自然性向</em>——補習班老師說：「我們有獨家題庫，多刷就有手感。」',
+    narrative: '初選只剩三週。性向測驗內容是<em>邏輯推理、數學性向、自然性向</em>——補習班老師說：「我們有獨家題庫，多刷就有手感。」',
     choices: [
       { label: 'A', text: '砸錢買全套題庫，每天加練兩小時', effects: { money: -25, grade: 15, mood: -10, health: -10 }, spend: 25 },
-      { label: 'B', text: '只做學校發的練習，正常作息', effects: { health: 5 } },
+      { label: 'B', text: '只做已經有的練習，正常作息', effects: { health: 5 } },
       { label: 'C', text: '帶他放空一天，反正性向測驗也練不來', effects: { mood: 10, health: 5 } }
     ],
     next: 'card3'
@@ -1801,7 +1801,7 @@ const RANDOM_CARDS = [
   { n: '03', title: '學校科展', desc: '老師邀請孩子參加科展，要花時間和材料費。',
     choices: [
       { label: 'A', text: '全力支持', effects: { money: -5, grade: 5, mood: 10, health: -5 }, spend: 5 },
-      { label: 'B', text: '婉拒，專心拚資優', effects: { mood: -10, grade: 3 } }
+      { label: 'B', text: '婉拒，專心拚資優鑑定', effects: { mood: -10, grade: 3 } }
     ]},
   { n: '04', title: '家庭爭吵', desc: '你和配偶因為「該補多少」吵了一架，孩子在房間聽到了。',
     choices: [
@@ -1811,7 +1811,7 @@ const RANDOM_CARDS = [
   { n: '05', title: '校內獎學金', desc: '孩子在校內競賽得獎，有一筆獎學金。',
     choices: [
       { label: 'A', text: '拿來繳補習費', effects: { money: 10, mood: -5 } },
-      { label: 'B', text: '給孩子當零用錢', effects: { money: 5, mood: 15 } }
+      { label: 'B', text: '給孩子當零用錢', effects: { mood: 15 } }
     ]},
   { n: '06', title: '同學邀約打球', desc: '同學約孩子放學後去打球。',
     choices: [
@@ -2055,12 +2055,12 @@ function renderRefusedEnding() {
         在書店翻自己喜歡的書，在飯桌上講今天學校發生的趣事。
       </div>
       <div class="reality-block" style="max-width:520px;margin:30px auto;">
-        <div class="reality-title">沒考鑑定，等於不是資優生嗎？</div>
+        <div class="reality-title">沒申請資優鑑定，等於不是資優生嗎？</div>
         <div class="reality-item">
-          《特殊教育學生及幼兒鑑定辦法》第 17 條列出<strong>四種</strong>學術性向資優鑑定基準：性向／成就測驗、學科競賽、研究輔導、獨立研究成果——<em>考試只是其中之一</em>。
+          《特殊教育學生及幼兒鑑定辦法》第 17 條列出<strong>四種</strong>學術性向資優鑑定基準：性向／成就測驗、學科競賽、研究輔導、獨立研究成果——<em>成就測驗只是其中之一</em>。
         </div>
         <div class="reality-item">
-          受訪者四提到：「資優班考試只能考出一個人對於這個領域的了解、精熟程度。」——通過鑑定不等於資優，沒去考也不等於不是。
+          受訪者四提到：「資優班考試只能考出一個人對於這個領域的了解、精熟程度。」——通過鑑定不等於資優，沒去申請也不等於不是。
         </div>
       </div>
       <div class="ending-quote" style="margin:30px auto;">
@@ -2277,7 +2277,7 @@ const ENDING_QUOTES = {
     from: '受訪者三・高中語文資優班'
   },
   prelim_fail_mid: {
-    intro: '在懊惱「為什麼沒考上」之前，先停下來問——',
+    intro: '在懊惱「為什麼沒通過鑑定」之前，先停下來問——',
     text: '資優是啥？是一個人有天賦嗎？那有天賦又是什麼呢？成績好就是天份嗎？我覺得不是啦。',
     from: '受訪者四・高中語文資優班'
   },
@@ -2417,7 +2417,7 @@ function renderSunkCost() {
 
       <div class="qa-item" data-qa>
         <div class="qa-question">
-          <span class="qa-q-text">Q1．你這一年為這場考試付出了多少錢？</span>
+          <span class="qa-q-text">Q1．你這一年為這個鑑定付出了多少錢？</span>
           <span class="qa-toggle">+</span>
         </div>
         <div class="qa-answer">
@@ -2502,7 +2502,7 @@ function renderQuoteReplay(direction) {
   scene.innerHTML = `
     <div class="ending-screen">
       <div class="quote-block">
-        <div class="quote-intro">還記得那個晚上，孩子問你為什麼一定要考資優班嗎？</div>
+        <div class="quote-intro">還記得那個晚上，孩子問你為什麼一定要通過資優鑑定嗎？</div>
         <div class="quote-text">${state.q27_answer}</div>
         <div class="quote-attribution">— 這是你告訴他的話。</div>
       </div>
@@ -2534,13 +2534,13 @@ function determineEnding() {
       icon: '🌿',
       title: '一個十二歲的禮物',
       sub: 'The Best You Could Give',
-      text: '孩子沒有通過初選——但你看著他，心情還在，健康還在，他還會在飯桌上跟你聊天，還會跟同學打球。<br><br>沒進資優班，不代表他不是資優生。鑑定辦法明列<strong>四種</strong>學術性向資賦優異基準（測驗、競賽、研究、推薦），考試只是其中之一。<br><br>多年後他會記得的，不是那張不存在的錄取通知，而是這一年你陪他做過的事。'
+      text: '孩子沒有通過初選——但你看著他，心情還在，健康還在，他還會在飯桌上跟你聊天，還會跟同學打球。<br><br>沒通過資優鑑定，不代表他不是資優生。鑑定辦法明列<strong>四種</strong>學術性向資賦優異基準（測驗、競賽、研究、推薦），測驗只是其中之一。<br><br>多年後他會記得的，不是那張不存在的資優班證明書，而是這一年你陪他做過的事。'
     },
     prelim_fail_mid: {
       icon: '😔',
       title: '白忙一場？',
       sub: 'For Nothing?',
-      text: '孩子沒有通過初選。<br><br>你大概會懊惱：「再加一科會不會就過了？」「補習班是不是不夠好？」<br><br>但請記得——資優鑑定有四種基準，性向測驗只是其中之一。被測驗篩掉，也可能是<strong>雙重殊異</strong>或<strong>偏才</strong>學生會遇到的情況。<br><br>把那份懊惱放下吧。孩子需要的，是你看見他真正的樣子。'
+      text: '孩子沒有通過初選。<br><br>你大概會懊惱：「補習再加一科會不會就過了？」「補習班是不是不夠好？」<br><br>但請記得——資優鑑定有四種基準，性向測驗只是其中之一。被測驗篩掉，也可能是<strong>雙重殊異</strong>或<strong>偏才</strong>學生會遇到的情況。<br><br>把那份懊惱放下吧。孩子需要的，是你看見他真正的樣子。'
     },
     prelim_fail_low: {
       icon: '💸',
@@ -2553,7 +2553,7 @@ function determineEnding() {
       icon: '🌱',
       title: '差一步，但你贏了',
       sub: 'A Loss That Wasn\'t One',
-      text: '孩子通過了初選，卻在複選實作評量止步。差了 ${gap} 分。<br><br>你會難過，但請看看他——他的眼神還是亮的，他還會笑。<br><br>你做對了一件最難的事：在所有人都在加碼的時候，你選擇了保護他的身心。沒有 penalty 扣分，這份分數，就是他現在真實的表現。<br><br>沒進資優班沒關係，他還是那個聰明、健康、被你愛著的孩子。'
+      text: '孩子通過了初選，卻在複選實作評量止步。差了 ${gap} 分。<br><br>你會難過，但請看看他——他的眼神還是亮的，他還會笑。<br><br>你做對了一件最難的事：在所有人都在加碼的時候，你選擇了保護他的身心。沒有因為身心狀態而扣分，這份分數，就是他現在真實的表現。<br><br>沒通過資優鑑定沒關係，他還是那個聰明、健康、被你愛著的孩子。'
     },
     complex_fail_mid: {
       icon: '😞',
@@ -2565,14 +2565,14 @@ function determineEnding() {
       icon: '💔',
       title: '錢花了，人也散了',
       sub: 'A Costly Defeat',
-      text: '孩子通過初選，但複選沒過——而且，他可能本來能過。<br><br>因為你在最後階段加碼，他的健康和心情崩了，臨場被扣 ${penalty} 分。如果這 ${penalty} 分還在，他就過了。<br><br>這是這款遊戲最諷刺的部分：<em>你越加碼補習，他離資優班越遠</em>。複選是實作評量，補習補不出臨場——只會把臨場拖垮。<br><br>下次，請相信他原本的狀態。'
+      text: '孩子通過初選，但複選沒過——而且，他可能本來能過。<br><br>因為你在最後階段加碼，他的健康和心情崩了，臨場被扣 ${penalty} 分。如果這 ${penalty} 分還在，他可能就過了。<br><br>複選實作評量考的是<strong>臨場反應與心理素質</strong>，再加碼補習，只會讓他更累，分數只會更低。你已經盡力。請把這個結果，當作他真實狀態的一個誠實答案。'
     },
     // 全過
     pass_high: {
       icon: '🌟',
       title: '上岸了，但他是「資優」還是「績優」？',
       sub: 'The Real Question',
-      text: '孩子通過了初選與複選，正式安置入資優班。你也守住了家庭。<br><br>但有一個問題，請你也問問自己——<br>他通過鑑定，是因為他真的對這個領域有<strong>強烈的好奇、自發的熱忱</strong>，還是只是<em>「對這個學科的精熟度夠高」</em>？<br><br>受訪者四說：「資優班考試只能考出一個人對於這個領域的了解、精熟程度。」——通過鑑定，不必然等於「資優」。'
+      text: '孩子通過了資優鑑定的初選與複選，成為資優生。你也守住了家庭。<br><br>但有一個問題，請你也問問自己——<br>他通過鑑定，是因為他真的對這個領域有<strong>強烈的好奇、自發的熱忱</strong>，還是只是<em>「對這個學科的精熟度夠高」</em>？<br><br>受訪者四說：「資優班考試只能考出一個人對於這個領域的了解、精熟程度。」——通過鑑定，不必然等於「資優」。'
     },
     pass_mid: {
       icon: '🎓',
@@ -2584,7 +2584,7 @@ function determineEnding() {
       icon: '💔',
       title: '得不償失的勝利',
       sub: 'A Pyrrhic Victory',
-      text: '孩子通過了——但你環顧四週，他不快樂、健康受損、家庭氣氛緊繃。<br><br>而且，你差點因為過度加碼，扣掉他複選 ${penalty} 分。<br><br>那些保證班、那些深夜的複習、那些他不快樂的日子——換來的是一個資優班的位子，但代價是他的<strong>學習動機</strong>與對該領域的<strong>熱忱</strong>，這些剛好是 Renzulli 三元論中「工作熱忱」的核心。<br><br>你以為是補習換來的，可能只是<em>他原本就有的精熟度</em>，被你用焦慮逼到了極限。'
+      text: '孩子通過了——但你環顧四週，他不快樂、健康受損、家庭氣氛緊繃。<br><br>而且，你差點因為過度加碼，扣掉他複選 ${penalty} 分。<br><br>那些保證班、那些深夜的複習、那些他不快樂的日子——換來的是一個資優班的位子，但代價是他的<strong>學習動機</strong>與對該領域的<strong>熱忱</strong>，這些剛好是 Renzulli 三元論中「工作熱忱」的核心。<br><br>你以為是補習換來的，可能只是<em>他原本就有的天賦</em>，被你用焦慮逼到了極限。'
     }
   };
 
@@ -2637,7 +2637,7 @@ function renderReality() {
             <li>參加學術機構長期輔導的<strong>學科研習活動</strong>，成就特別優異並經主辦單位推薦。</li>
             <li><strong>獨立研究成果</strong>優異並刊載於學術性刊物，經專家或教師推薦並附資料。</li>
           </ol>
-          也就是說：<em>「考試」只是四種管道之一</em>。
+          也就是說：<em>「性向或成就測驗」只是四種管道之一</em>。
           <span class="qa-cite">資料來源：《特殊教育學生及幼兒鑑定辦法》第 17 條</span>
         </div>
       </div>
@@ -2688,7 +2688,7 @@ function renderReality() {
           <span class="qa-toggle">+</span>
         </div>
         <div class="qa-answer">
-          根源是<strong>升學主義</strong>。郭靜姿教授曾指出：在升學主義影響下，「資優教育」與「績優教育」混淆不清，教師與家長在學習評量上多要求學生「資優必須績優」，無形中提高了課業壓力，阻礙了思考教育與情意教育的推展。<br><br>
+          根源可能是<strong>升學主義</strong>。郭靜姿教授曾指出：在升學主義影響下，「資優教育」與「績優教育」混淆不清，教師與家長在學習評量上多要求學生「資優必須績優」，無形中提高了課業壓力，阻礙了思考教育與情意教育的推展。<br><br>
           甚至有學生被鑑定為某類資優之後，自己不相信、家長也驚訝——因為他那個科目的考試成績並不好。
           <div class="qa-interview">
             我相信一定有資優生，但我覺得我們班沒有真正的資優生，只是成績好而已。
@@ -2708,7 +2708,7 @@ function renderReality() {
         </div>
         <div class="qa-answer">
           訪談多位資優班學生後，多數受訪者表示：補習<strong>確實</strong>有助於通過鑑定。<br><br>
-          現行鑑定在初試階段高度仰賴標準化的學科成就測驗（語文能力測驗、數學性向測驗），而紙筆測驗測量的是學生對知識的<em>精熟度</em>與<em>先備知識的廣度</em>。補習班透過大量刷題、超修進度、分析考古題，能極大化標準化測驗上的表現。
+          他們認為：現行鑑定在初試階段高度仰賴標準化的學科成就測驗（語文能力測驗、數學性向測驗），而紙筆測驗測量的是學生對知識的<em>精熟度</em>與<em>先備知識的廣度</em>。補習班透過大量刷題、超修進度、分析考古題，能極大化標準化測驗上的表現。
           <div class="qa-interview">
             資優班考試只能考出一個人對於這個領域的了解、精熟程度。
             <span class="qa-interview-from">— 受訪者四・高中語文資優班</span>
@@ -2755,8 +2755,8 @@ function renderFinalMessage() {
     <div class="ending-screen">
       <div class="final-message">
         <div class="final-text">
-          補習或許能考進「<em>資優班</em>」，<br>
-          但不一定能補出「<em>資優生</em>」。
+          補習或許能送孩子進入「<em>資優班</em>」，<br>
+          但不一定能成為「<em>資優生</em>」。
         </div>
         <div class="ending-quote">
           <div class="ending-quote-intro">${q.intro}</div>
@@ -2766,8 +2766,8 @@ function renderFinalMessage() {
         <div class="final-sub">
           這款遊戲不是要否定努力，<br>
           也不是要妖魔化補習班。<br>
-          它要拆穿的是一個常見的因果錯覺：<br>
-          「孩子考上資優班 = 他是資優生」。<br><br>
+          它要破解的是一個常見的迷思：<br>
+          「補習，可以成為資優生」。<br><br>
           願你下次面對孩子的考試成績時，<br>
           看見的是孩子，不只是分數。
         </div>
@@ -2785,7 +2785,7 @@ function renderClosure() {
   let myCategoryNumber = null;
   let myCategoryTotal = null;
   if (state.refusedToTest) {
-    myCategoryLabel = '位選擇尊重孩子、不去考的家長';
+    myCategoryLabel = '位選擇尊重孩子、不參與鑑定的家長';
     if (s) { myCategoryNumber = s.refusedRank; myCategoryTotal = s.refusedPlayers; }
   } else if (state.passedPreliminary && state.passedComplex) {
     myCategoryLabel = '位讓孩子通過完整鑑定的家長';
@@ -2819,7 +2819,7 @@ function renderClosure() {
         </div>
         <div class="stat-cell">
           <div class="stat-cell-num">${(s.refusedPlayers || 0).toLocaleString()}</div>
-          <div class="stat-cell-label">選擇不考試</div>
+          <div class="stat-cell-label">選擇不參與鑑定</div>
         </div>
       </div>
       ${myCategoryNumber !== null && myCategoryNumber > 0 ? `
@@ -2849,7 +2849,7 @@ function renderClosure() {
   ` : `
     <div class="message-area">
       <div class="message-prompt">玩完這場遊戲，你想說什麼？</div>
-      <div class="message-prompt-sub">不必填，留言會匿名收進我們的研究資料中。</div>
+      <div class="message-prompt-sub">選填，留言會匿名傳送給開發人員。</div>
       <textarea id="playerMessage" class="message-textarea" placeholder="例如：原來資優跟績優可以這樣區分⋯⋯／我以前也覺得補習就會考上⋯⋯" maxlength="800"></textarea>
       <div class="message-actions">
         <span class="message-charcount" id="msgCharCount">0 / 800</span>
@@ -2931,7 +2931,7 @@ function restartGame() {
 }
 
 function shareGame() {
-  const text = '我玩了一款叫《PR 97》的遊戲，結局讓我停了很久。\n推薦你也來體驗一次。';
+  const text = '我玩了一款叫《PR 97》的遊戲。\n推薦你也來體驗一次。';
   if (navigator.share) {
     navigator.share({ title: 'PR 97 — 資優？績優！', text }).catch(() => {});
   } else if (navigator.clipboard) {
